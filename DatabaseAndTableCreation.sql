@@ -31,7 +31,7 @@ SELECT * FROM dbo.Country
 CREATE TABLE Zip
 (
 	Id INT NOT NULL IDENTITY(0,1),
-	Zip VARCHAR(50) NOT NULL,
+	ZipCode VARCHAR(50) NOT NULL,
 	City NVARCHAR(100) NOT NULL,
 	Country_Id INT NOT NULL,
 	CONSTRAINT PK_Zip_Id PRIMARY KEY (Id),
@@ -141,7 +141,7 @@ CREATE TABLE Product
 (
 	Id INT NOT NULL IDENTITY(0,1),
 	Name NVARCHAR(150) NOT NULL,
-	Price SMALLMONEY NOT NULL,
+	Price DECIMAL(7,2) NOT NULL,
 	EAN VARCHAR(20) NULL,
 	WeightGram INT NOT NULL,
 	Manufacturer_Id INT NOT NULL,
@@ -270,29 +270,46 @@ VALUES
 (361, 15, 3), --Dell laptop, Norge Oslo
 (99, 16, 3), --Electrolux PC, Norge Oslo
 (87, 17, 3), --Samsung TV, Norge Oslo
-------- Norge Oslo
-(879, 0, 3), --Philips TV, Norge Oslo
-(86, 1, 3), --Sony mobil, Norge Oslo
-(123, 2, 3), --Samsung mobil, Norge Oslo
-(668, 3, 3), --Samsung tablet, Norge Oslo
-(453, 4, 3), --Dell Desktop, Norge Oslo
-(97, 5, 3), --Lenovo laptop, Norge Oslo
-(566, 6, 3), --Electrolux fryser, Norge Oslo
-(324, 7, 3), --Nikon kamera, Norge Oslo
-(21, 8, 3), --Sandberg hukommelseskort, Norge Oslo
-(852, 9, 3), --Dyson støvsuger, Norge Oslo
-(65, 10, 3), --Philips støvsuger, Norge Oslo
-(1, 11, 3), --Sony hukommelseskort, Norge Oslo
-(335, 12, 3), --Sony kamera, Norge Oslo
-(698, 13, 3), --Philips fryser, Norge Oslo
-(447, 14, 3), --Sony laptop, Norge Oslo
-(361, 15, 3), --Dell laptop, Norge Oslo
-(99, 16, 3), --Electrolux PC, Norge Oslo
-(87, 17, 3) --Samsung TV, Norge Oslo
+------- Rusland Moskva
+(555, 0, 4), --Philips TV, Rusland Moskva
+(569, 1, 4), --Sony mobil, Rusland Moskva
+(223, 2, 4), --Samsung mobil, Rusland Moskva
+(78, 3, 4), --Samsung tablet, Rusland Moskva
+(23, 4, 4), --Dell Desktop, Rusland Moskva
+(256, 5, 4), --Lenovo laptop, Rusland Moskva
+(46, 6, 4), --Electrolux fryser, Rusland Moskva
+(92, 7, 4), --Nikon kamera, Rusland Moskva
+(662, 8, 4), --Sandberg hukommelseskort, Rusland Moskva
+(12, 9, 4), --Dyson støvsuger, Rusland Moskva
+(789, 10, 4), --Philips støvsuger, Rusland Moskva
+(233, 11, 4), --Sony hukommelseskort, Rusland Moskva
+(3, 12, 4), --Sony kamera, Rusland Moskva
+(613, 13, 4), --Philips fryser, Rusland Moskva
+(77, 14, 4), --Sony laptop, Rusland Moskva
+(13, 15, 4), --Dell laptop, Rusland Moskva
+(556, 16, 4), --Electrolux PC, Rusland Moskva
+(23, 17, 4) --Samsung TV, Rusland Moskva
 GO
 
-SELECT * FROM dbo.Product
-SELECT * FROM dbo.Warehouse
+SELECT wp.Quantity, p.Name as 'Product', w.Name as 'Warehouse name', c.Name as 'Category', cn.Name as 'Country'
+FROM Warehouse_Product wp
+LEFT JOIN Product p
+ON wp.Product_Id = p.Id
+LEFT JOIN Warehouse w
+ON wp.Warehouse_Id = w.Id
+LEFT JOIN Category c
+ON p.Category_Id = c.Id
+LEFT JOIN Zip z
+ON w.Zip_Id = z.Id
+LEFT JOIN Country cn
+ON z.Country_Id = cn.Id
+ORDER BY p.Id
+
+
+SELECT z.Id, z.Zip, z.City, c.Name as Country
+FROM dbo.Zip z
+LEFT JOIN dbo.Country c
+ON z.Country_Id = c.Id
 
 ---------------- Customer Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.Customer;
@@ -327,8 +344,8 @@ CREATE TABLE Courier
 (
 	Id INT NOT NULL IDENTITY(0,1),
 	Name VARCHAR(50) NOT NULL,
-	InitialFee SMALLMONEY NOT NULL,
-	WeightFee SMALLMONEY NOT NULL,
+	InitialFee DECIMAL(7,2) NOT NULL,
+	WeightFee DECIMAL(7,2) NOT NULL,
 	CONSTRAINT PK_Courier_Id PRIMARY KEY (Id)
 )
 
@@ -338,7 +355,7 @@ CREATE TABLE CustomerOrder
 (
 	Id BIGINT NOT NULL IDENTITY(0,1),
 	OrderDate DATETIME2 NOT NULL DEFAULT GETDATE(),
-	ShippingFee SMALLMONEY NOT NULL,
+	ShippingFee DECIMAL(7,2) NOT NULL,
 	Customer_Id INT NOT NULL,
 	Courier_Id INT NOT NULL,
 	PaymentMethod_Id INT NOT NULL,
@@ -353,7 +370,7 @@ CREATE TABLE CustomerOrder
 CREATE TABLE OrderLine
 (
 	Quantity INT NOT NULL,
-	Price SMALLMONEY NOT NULL,
+	Price DECIMAL(7,2) NOT NULL,
 	Product_Id INT NOT NULL,
 	CustomerOrder_Id BIGINT NOT NULL,
 	CONSTRAINT FK_OrderLine_Product FOREIGN KEY (Product_Id) REFERENCES Product(Id),
