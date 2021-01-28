@@ -306,27 +306,27 @@ ON z.Country_Id = cn.Id
 ORDER BY p.Id
 
 
-SELECT z.Id, z.Zip, z.City, c.Name as Country
-FROM dbo.Zip z
-LEFT JOIN dbo.Country c
-ON z.Country_Id = c.Id
-
 ---------------- Customer Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.Customer;
 CREATE TABLE Customer
 (
 	Id INT NOT NULL IDENTITY(0,1),
-	FirstName VARCHAR(50) NULL,
-	LastName VARCHAR(100) NULL,
-	Email VARCHAR(70) NULL,
+	FirstName VARCHAR(50) NOT NULL,
+	LastName VARCHAR(100) NOT NULL,
+	Email VARCHAR(70) NOT NULL,
+	NormalizedEmail VARCHAR(70) NULL,
+	Username VARCHAR(50) NOT NULL,
+	NormalizedUsername VARCHAR(50) NULL,
 	Address NVARCHAR(100) NOT NULL,
 	Phone VARCHAR(50) NOT NULL,
 	Zip_Id INT NOT NULL,
 	Country_Id INT NOT NULL,
 	CONSTRAINT PK_Customer_Id PRIMARY KEY (Id),
 	CONSTRAINT UNIQUE_Customer_Email UNIQUE(Email),
+	CONSTRAINT UNIQUE_Customer_Email UNIQUE(Email),
 	CONSTRAINT FK_Customer_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id),
-	CONSTRAINT FK_Customer_Country FOREIGN KEY (Country_Id) REFERENCES Country(Id)
+	CONSTRAINT FK_Customer_Country FOREIGN KEY (Country_Id) REFERENCES Country(Id),
+	CREATE INDEX
 )
 
 ---------------- PaymentMethod Table -------------------
