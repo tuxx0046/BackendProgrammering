@@ -12,7 +12,7 @@ namespace SimpleORMDemo.DataAccess
 
         public CategoryORM()
         {
-            _connection = MSSQLConnection.GetConnection("bigshop");
+            _connection = MSSQLConnection.GetConnection();
         }
 
         public List<Category> GetAllCategories()

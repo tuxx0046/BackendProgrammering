@@ -14,7 +14,7 @@ namespace SimpleORMDemo.DataAccess
 
         public ProductORM()
         {
-            _connection = MSSQLConnection.GetConnection("bigshop");
+            _connection = MSSQLConnection.GetConnection();
             _manufacturerORM = new ManufacturerORM();
             _categoryORM = new CategoryORM();
         }

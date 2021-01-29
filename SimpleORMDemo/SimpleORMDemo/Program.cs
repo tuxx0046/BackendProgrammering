@@ -53,7 +53,7 @@ namespace SimpleORMDemo
             */
 
             /////////////// Delete data /////////////
-            productORM.RemoveProductById(29);
+            productORM.RemoveProductById(27);
 
             //0('Philips')
             //1('Sony') 

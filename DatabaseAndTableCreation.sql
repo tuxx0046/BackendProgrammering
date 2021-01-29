@@ -1,5 +1,5 @@
 ﻿--USE MASTER; DROP DATABASE IF EXISTS BigShop;
---CREATE DATABASE BigShop;
+CREATE DATABASE BigShop;
 
 USE BigShop;
 GO
@@ -13,6 +13,7 @@ CREATE TABLE Country
 	CONSTRAINT PK_Country_Id PRIMARY KEY (Id)
 )
 GO
+
 --/////////////// Insert into Country Table ///////////////
 INSERT INTO dbo.Country(Name)
 VALUES
@@ -35,12 +36,12 @@ CREATE TABLE Zip
 	City NVARCHAR(100) NOT NULL,
 	Country_Id INT NOT NULL,
 	CONSTRAINT PK_Zip_Id PRIMARY KEY (Id),
-	CONSTRAINT FK_Zip_Country FOREIGN KEY (Country_Id) REFERENCES Country(Id)
+	CONSTRAINT FK_Zip_Country FOREIGN KEY (Country_Id) REFERENCES dbo.Country(Id)
 )
 GO
 
 --/////////////// Insert into Zip Table ///////////////
-INSERT INTO dbo.Zip(Zip, City, Country_Id)
+INSERT INTO dbo.Zip(ZipCode, City, Country_Id)
 VALUES
 ('5000', 'Odense', 0), --Danmark
 ('10117', 'Berlin', 1), --Tyskland
@@ -303,31 +304,43 @@ LEFT JOIN Zip z
 ON w.Zip_Id = z.Id
 LEFT JOIN Country cn
 ON z.Country_Id = cn.Id
-ORDER BY p.Id
-
+ORDER BY p.Id ASC, cn.Name ASC
 
 ---------------- Customer Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.Customer;
 CREATE TABLE Customer
 (
 	Id INT NOT NULL IDENTITY(0,1),
-	FirstName VARCHAR(50) NOT NULL,
-	LastName VARCHAR(100) NOT NULL,
+	FirstName NVARCHAR(50) NOT NULL,
+	LastName NVARCHAR(100) NOT NULL,
 	Email VARCHAR(70) NOT NULL,
 	NormalizedEmail VARCHAR(70) NULL,
-	Username VARCHAR(50) NOT NULL,
-	NormalizedUsername VARCHAR(50) NULL,
-	Address NVARCHAR(100) NOT NULL,
+	AddressLane NVARCHAR(100) NOT NULL,
 	Phone VARCHAR(50) NOT NULL,
 	Zip_Id INT NOT NULL,
-	Country_Id INT NOT NULL,
 	CONSTRAINT PK_Customer_Id PRIMARY KEY (Id),
-	CONSTRAINT UNIQUE_Customer_Email UNIQUE(Email),
-	CONSTRAINT UNIQUE_Customer_Email UNIQUE(Email),
-	CONSTRAINT FK_Customer_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id),
-	CONSTRAINT FK_Customer_Country FOREIGN KEY (Country_Id) REFERENCES Country(Id),
-	CREATE INDEX
+	CONSTRAINT UNIQUE_Customer_NormalizedEmail UNIQUE(NormalizedEmail),
+	CONSTRAINT FK_Customer_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id)
 )
+GO
+
+--/////////////// Insert into Customer Table ///////////////
+INSERT INTO dbo.Customer(FirstName, LastName, Email, NormalizedEmail, AddressLane, Phone, Zip_Id)
+VALUES
+(N'Jørgen', N'Ådahl', 'JAA@karma.dk', 'jaa@karma.dk', 'Strandvej 115', '65487566', 0), --5000, Danmark
+(N'Miauw', N'Katzemann', 'NYAAA@cat.de', 'nyaaa@cat.de', 'Eine kleine katzmuzik 44', '55213687', 1), --10117, Tyskland
+(N'Michel', N'Foucault', 'discourse@lafrance.fr', 'discourse@lafrance.fr', 'Archeology of Knowlede boulevard 32', '41023698', 2), --69007, Frankrig
+(N'Bamse', N'Kylling', 'bamseogkylling@yesplz.no', 'bamseogkylling@yesplz.no', 'Oslostraede 87', '54879632', 3), --0158, Norge
+(N'Karl', N'Marx', 'marx@comm.com', 'marx@comm.com', 'Vodka lane 1', '55648975' , 4) --10100, Rusland
+GO
+
+SELECT * FROM Customer
+
+SELECT z.Id, z.ZipCode, c.Name as Country
+FROM ZIP z
+LEFT JOIN Country c
+ON z.Country_Id = c.Id
+
 
 ---------------- PaymentMethod Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.PaymentMethod;
@@ -338,16 +351,40 @@ CREATE TABLE PaymentMethod
 	CONSTRAINT PK_PaymentMethod_Id PRIMARY KEY (Id)
 )
 
+--/////////////// Insert into PaymentMethod Table ///////////////
+INSERT INTO dbo.PaymentMethod(Name)
+VALUES
+('VISA'),
+('Mastercard'),
+('Dankort'),
+('American Express'),
+('Paypal'),
+('Bank transfer')
+GO
+
+SELECT * FROM dbo.PaymentMethod
+
 ---------------- Courier Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.Courier;
 CREATE TABLE Courier
 (
 	Id INT NOT NULL IDENTITY(0,1),
 	Name VARCHAR(50) NOT NULL,
-	InitialFee DECIMAL(7,2) NOT NULL,
+	InitialCost DECIMAL(7,2) NOT NULL,
 	WeightFee DECIMAL(7,2) NOT NULL,
 	CONSTRAINT PK_Courier_Id PRIMARY KEY (Id)
 )
+
+--/////////////// Insert into Courier Table ///////////////
+INSERT INTO dbo.Courier(Name, InitialCost, WeightFee)
+VALUES
+('DHL', 79.00, 22.23),
+('GLS', 55.95, 25.00),
+('PostNord', 89.00, 23.11),
+('DeliverXpert', 123.00, 16.76)
+
+SELECT * FROM dbo.Courier
+
 
 ---------------- CustomerOrder Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.CustomerOrder;
@@ -355,7 +392,8 @@ CREATE TABLE CustomerOrder
 (
 	Id BIGINT NOT NULL IDENTITY(0,1),
 	OrderDate DATETIME2 NOT NULL DEFAULT GETDATE(),
-	ShippingFee DECIMAL(7,2) NOT NULL,
+	InitialShippingCost DECIMAL(7,2) NOT NULL,
+	WeightFee DECIMAL(7,2) NOT NULL,
 	Customer_Id INT NOT NULL,
 	Courier_Id INT NOT NULL,
 	PaymentMethod_Id INT NOT NULL,
@@ -364,6 +402,19 @@ CREATE TABLE CustomerOrder
 	CONSTRAINT FK_Order_Courier FOREIGN KEY (Courier_Id) REFERENCES Courier(Id),
 	CONSTRAINT FK_Order_PaymentMethod FOREIGN KEY (PaymentMethod_Id) REFERENCES PaymentMethod(Id)
 )
+
+--/////////////// Insert into Customer Table ///////////////
+INSERT INTO dbo.CustomerOrder(OrderDate, ShippingFee, Customer_Id, Courier_Id, PaymentMethod_Id)
+VALUES
+('2020-02-21 11:42:53', (SELECT InitialCost FROM dbo.Courier), ), --DHL, 79.00, Jørgen
+('2020-03-19 08:11:13', 55.95, ), --GLS, 55.95, Miauw
+('2020-07-03 10:26:23', 89.00, ), --PostNord, 89.00, 
+('2020-08-25 15:01:03', 123.00, ), --DeliverXpert, 123.00
+('2021-01-29 10:22:38', 79.00, ), --DHL, 79.00
+SELECT GETDATE()
+SELECT * FROM Customer
+SELECT * FROM Courier
+SELECT * FROM PaymentMethod
 
 ---------------- OrderLine Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.OrderLine;

@@ -10,10 +10,10 @@ namespace SimpleORMDemo.DataAccess
     /// </summary>
     public static class MSSQLConnection
     {
-        public static SqlConnection GetConnection(string database)
+        public static SqlConnection GetConnection()
         {
             SqlConnection connection;
-            string connectionString = $"Data Source=localhost;Initial Catalog={database};Integrated Security=True";
+            string connectionString = $"Data Source=localhost;Initial Catalog=bigshop;Integrated Security=True";
             connection = new SqlConnection(connectionString);
 
             return connection;

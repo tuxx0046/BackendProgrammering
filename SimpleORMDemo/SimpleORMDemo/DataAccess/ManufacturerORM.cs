@@ -12,7 +12,7 @@ namespace SimpleORMDemo.DataAccess
 
         public ManufacturerORM()
         {
-            _connection = MSSQLConnection.GetConnection("bigshop");
+            _connection = MSSQLConnection.GetConnection();
         }
 
         public List<Manufacturer> GetAllManufacturers()
