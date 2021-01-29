@@ -404,13 +404,26 @@ CREATE TABLE CustomerOrder
 )
 
 --/////////////// Insert into Customer Table ///////////////
-INSERT INTO dbo.CustomerOrder(OrderDate, ShippingFee, Customer_Id, Courier_Id, PaymentMethod_Id)
+INSERT INTO dbo.CustomerOrder(OrderDate, InitialShippingCost, WeightFee, Customer_Id, Courier_Id, PaymentMethod_Id)
 VALUES
-('2020-02-21 11:42:53', (SELECT InitialCost FROM dbo.Courier), ), --DHL, 79.00, Jørgen
-('2020-03-19 08:11:13', 55.95, ), --GLS, 55.95, Miauw
-('2020-07-03 10:26:23', 89.00, ), --PostNord, 89.00, 
-('2020-08-25 15:01:03', 123.00, ), --DeliverXpert, 123.00
-('2021-01-29 10:22:38', 79.00, ), --DHL, 79.00
+('2020-02-21 11:42:53', (SELECT InitialCost FROM dbo.Courier WHERE Id = 0), (SELECT WeightFee FROM dbo.Courier WHERE Id = 0), 0, 0, 0), --Jørgen, DHL, VISA
+('2020-03-19 08:11:13',(SELECT InitialCost FROM dbo.Courier WHERE Id = 1), (SELECT WeightFee FROM dbo.Courier WHERE Id = 1), 1, 1, 1), --Miauw, GLS, Mastercard
+('2020-07-03 10:26:23', (SELECT InitialCost FROM dbo.Courier WHERE Id = 2), (SELECT WeightFee FROM dbo.Courier WHERE Id = 2), 2, 2, 2), --Michel, PostNord, Dankort
+('2020-08-25 15:01:03', (SELECT InitialCost FROM dbo.Courier WHERE Id = 3), (SELECT WeightFee FROM dbo.Courier WHERE Id = 3), 3, 3, 3), --Bamse, DeliverXpert, American Express
+('2021-01-29 10:22:38', (SELECT InitialCost FROM dbo.Courier WHERE Id = 0), (SELECT WeightFee FROM dbo.Courier WHERE Id = 0), 4, 0, 4) --Karl, DHL, Paypal
+
+
+SELECT co.Id, CONVERT(date, co.OrderDate) as 'Order date', co.InitialShippingCost, co.WeightFee, c.Id as CustomerId, CONCAT_WS(' ', c.FirstName, c.LastName) as Customer, crr.Name as Courier, p.Name as 'Payment Method' 
+FROM dbo.CustomerOrder co
+LEFT JOIN Customer c
+ON co.Customer_Id = c.Id
+LEFT JOIN Courier crr
+ON co.Courier_Id = crr.Id
+LEFT JOIN PaymentMethod p
+ON co.PaymentMethod_Id = p.Id
+ORDER BY 'Order date'
+
+SELECT * FROM CustomerOrder
 SELECT GETDATE()
 SELECT * FROM Customer
 SELECT * FROM Courier
@@ -428,6 +441,27 @@ CREATE TABLE OrderLine
 	CONSTRAINT FK_OrderLine_CustomerOrder FOREIGN KEY (CustomerOrder_Id) REFERENCES CustomerOrder(Id)
 )
 
+--/////////////// Insert into OrderLine Table ///////////////
+INSERT INTO dbo.OrderLine(Quantity, Price, Product_Id, CustomerOrder_Id)
+VALUES
+(1, (SELECT Price FROM dbo.Product WHERE Id = 0), 0, 0), -- Philips TV, Jørgen
+(2, (SELECT Price FROM dbo.Product WHERE Id = 1), 1, 1), -- Sony phone, Miauw
+(5, (SELECT Price FROM dbo.Product WHERE Id = 8), 8, 2), -- Sandberg MicroSD, Michel
+(4, (SELECT Price FROM dbo.Product WHERE Id = 13), 13, 3), -- Philips Fryser, Bamse
+(2, (SELECT Price FROM dbo.Product WHERE Id = 9), 9, 4) -- Dyson støvsuger, Karl
+
+SELECT ol.Quantity, ol.Price as 'Price per item', p.Name as 'Product', ol.Quantity * p.WeightGram as 'Total weight i grams', CONVERT(date, co.OrderDate) as 'Date', CONCAT_WS(' ', c.FirstName, c.LastName) as 'Full name', (ol.Quantity * ol.Price) + (((ol.Quantity * p.WeightGram) / 1000) * co.WeightFee) + co.InitialShippingCost as 'Total shipping cost' 
+FROM dbo.OrderLine ol
+LEFT JOIN Product p
+ON ol.Product_Id = p.Id
+LEFT JOIN CustomerOrder co
+ON ol.CustomerOrder_Id = co.Id
+LEFT JOIN Customer c
+ON co.Customer_Id = c.Id
+
+SELECT * FROM Product
+SELECT * FROM CustomerOrder
+
 ---------------- Position Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.Position;
 CREATE TABLE Position
@@ -437,6 +471,19 @@ CREATE TABLE Position
 	CONSTRAINT PK_Position_Id PRIMARY KEY (Id)
 )
 
+--/////////////// Insert into Position Table ///////////////
+INSERT INTO dbo.Position(Name)
+VALUES
+('Register'),
+('Warehouse worker'),
+('Packaging'),
+('Warehouse Manager'),
+('Salesman'),
+('Department leader'),
+('Customer service')
+
+SELECT * FROM dbo.Position
+
 ---------------- Department Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.Department;
 CREATE TABLE Department
@@ -444,10 +491,27 @@ CREATE TABLE Department
 	Id INT NOT NULL IDENTITY(0,1),
 	Name VARCHAR(50) NOT NULL,
 	Phone VARCHAR(50) NULL,
+	AddressLane NVARCHAR(100) NOT NULL,
+	Zip_Id INT NOT NULL,
 	Warehouse_Id INT NOT NULL,
 	CONSTRAINT PK_Department_Id PRIMARY KEY (Id),
+	CONSTRAINT FK_Department_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id),
 	CONSTRAINT FK_Department_Warehouse FOREIGN KEY (Warehouse_Id) REFERENCES Warehouse(Id)
 )
+
+--/////////////// Insert into Department Table ///////////////
+INSERT INTO dbo.Department(Name, Phone, AddressLane, Zip_Id, Warehouse_Id)
+VALUES
+('Odense Afdeling', '54687866', 'Fyngade 33', 0, 0), --Odense, Odense lager
+('Berlin Afdeling', '58996321', 'Deutsche weg 11', 1, 1), --Berlin, Berlin lager
+('Lyon Afdeling', '78961123', 'Bordieu la road 65', 2, 2), --Lyon, Lyon lager
+('Oslo Afdeling', '22364899', 'Norges landevej 1 ', 3, 3), --Oslo, Oslo lager
+('Moskva Afdeling', '98457832', 'Tolstoy 47', 4, 4) --Moskva, Moskva lager
+
+SELECT * FROM dbo.Department
+
+SELECT * FROM Zip
+SELECT * FROM Warehouse
 
 ---------------- Employee Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.Employee;
@@ -465,6 +529,31 @@ CREATE TABLE Employee
 	CONSTRAINT FK_Employee_Deparment FOREIGN KEY (Department_Id) REFERENCES Department(Id)
 )
 
+
+--/////////////// Insert into Employee Table ///////////////
+INSERT INTO dbo.Employee(FirstName, LastName, Email, Phone, Position_Id, Department_Id)
+VALUES
+('Thomas', 'Josefsen', 'odense@bigshop.com', '21354685', 1, 0), --Odense afdeling, warehouse worker
+('Marie', 'Karlsen', 'odense@bigshop.com', '65478522', 2, 0), --Odense afdeling, packaging
+('Louise', 'Kofoed', 'berlin@bigshop.com', '54853612', 4, 1), --Berlin afdeling, Salesman
+('Karen', 'Michelin', 'berlin@bigshop.com', '85469632', 2, 1), --Berlin afdeling, packaging
+('Lars', 'Olsen', 'lyon@bigshop.com', '54632111', 5, 2), --Lyon afdeling, Department leader
+('Trevor', 'Noah', 'oslo@bigshop.com', '55689412', 1, 3), --Oslo afdeling, warehouse worker
+('Botan', 'Sisiro', 'moskva@bigshop.com', '44522133', 6, 4), --Moskva afdeling, customer service
+('Polka', 'Omaru', 'moskva@bigshop.com', '87965521', 1, 4) --Moskva afdeling, warehouse worker
+
+SELECT e.Id, CONCAT_WS(' ', e.FirstName, e.LastName) as 'Name', e.Email, e.Phone, p.Name as 'Position', d.Name as 'Department'
+FROM dbo.Employee e
+LEFT JOIN dbo.Position p
+ON e.Position_Id = p.Id
+LEFT JOIN dbo.Department d
+ON e.Department_Id = d.Id
+ORDER BY Id
+
+
+SELECT * FROM dbo.Position
+SELECT * FROM dbo.Department
+
 ---------------- OrderStatus Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.OrderStatus;
 CREATE TABLE OrderStatus
@@ -473,6 +562,18 @@ CREATE TABLE OrderStatus
 	Name VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_OrderStatus_Id PRIMARY KEY (Id)
 )
+
+--/////////////// Insert into OrderStatus Table ///////////////
+INSERT INTO dbo.OrderStatus(Name)
+VALUES
+('Received'),
+('Picked'),
+('Packed'),
+('Sent'),
+('Store bought')
+
+SELECT * FROM dbo.OrderStatus
+
 
 ---------------- OrderProcess Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.OrderProcess;
