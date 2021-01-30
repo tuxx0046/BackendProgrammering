@@ -566,11 +566,12 @@ CREATE TABLE OrderStatus
 --/////////////// Insert into OrderStatus Table ///////////////
 INSERT INTO dbo.OrderStatus(Name)
 VALUES
-('Received'),
+('Started processing'),
 ('Picked'),
 ('Packed'),
 ('Sent'),
-('Store bought')
+('Store bought'),
+('On hold')
 
 SELECT * FROM dbo.OrderStatus
 
@@ -587,3 +588,47 @@ CREATE TABLE OrderProcess
 	CONSTRAINT FK_OrderProcess_CustomerOrder FOREIGN KEY (CustomerOrder_Id) REFERENCES CustomerOrder(Id),
 	CONSTRAINT FK_OrderProcess_OrderStatus FOREIGN KEY (OrderStatus_Id) REFERENCES OrderStatus(Id)
 )
+
+--/////////////// Insert into OrderStatus Table ///////////////
+INSERT INTO dbo.OrderProcess(ProcessDate, Employee_Id, CustomerOrder_Id, OrderStatus_Id)
+VALUES
+((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 0), 0, 0, 0), --warehouse worker, odense order, started processing
+('2020-02-22 08:54:00', 1, 0, 2), --packaging, odense order, packed
+('2020-02-22 16:30:11', 1, 0, 3), --packaging, odense order, sent
+((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 1), 3, 1, 4), --salesman, berlin order, store bought
+((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 3), 4, 3, 0), --department leader, lyon order, started processing
+('2020-07-23 11:14:20', 4, 3, 1), --department leader, lyon order, picked
+('2020-07-23 17:30:11', 4, 3, 2), --department leader, lyon order, packed
+('2020-07-25 10:27:55', 4, 3, 3), --department leader, lyon order, sent
+((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 3), 5, 3, 0), --warehouse worker, oslo order, started processing
+('2020-08-26 09:32:10', 5, 3, 1), --warehouse worker, oslo order, picked
+((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 4), 7, 4, 0), --warehouse worker, moskva order, started processing
+('2021-01-29 10:45:36', 7, 4, 1), --warehouse worker, moska order, picked
+('2021-01-29 15:10:44', 6, 4, 5) --customer service, moska order, on hold
+
+
+SELECT op.ProcessDate as 'Time of processing', op.CustomerOrder_Id as 'Order Id', CONCAT_WS(' ', e.FirstName, e.LastName) as 'Employee name', os.Name as 'Status'
+FROM dbo.OrderProcess op
+LEFT JOIN dbo.Employee e
+ON op.Employee_Id = e.Id
+LEFT JOIN dbo.OrderStatus os
+ON op.OrderStatus_Id = os.Id
+
+
+
+select co.Id, co.OrderDate, z.City 
+from CustomerOrder co
+left join Customer c
+on co.Customer_Id = c.Id
+left join Zip z
+on c.Zip_Id = z.Id
+
+SELECT * FROM dbo.OrderStatus
+
+SELECT e.Id, CONCAT_WS(' ', e.FirstName, e.LastName) as 'Name', e.Email, e.Phone, p.Name as 'Position', d.Name as 'Department'
+FROM dbo.Employee e
+LEFT JOIN dbo.Position p
+ON e.Position_Id = p.Id
+LEFT JOIN dbo.Department d
+ON e.Department_Id = d.Id
+ORDER BY Id
