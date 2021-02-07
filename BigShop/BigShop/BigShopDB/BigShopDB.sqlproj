@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>BigShopDB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{fbd8f41d-7065-48ae-80a5-2f96e00b772c}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>BigShopDB</RootNamespace>
+    <AssemblyName>BigShopDB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="Scripts" />
+    <Folder Include="dbo\Types" />
+    <Folder Include="dbo\Stored Procedures\Category" />
+    <Folder Include="dbo\Stored Procedures\Country" />
+    <Folder Include="dbo\Stored Procedures\Courier" />
+    <Folder Include="dbo\Stored Procedures\Customer" />
+    <Folder Include="dbo\Stored Procedures\CustomerOrder" />
+    <Folder Include="dbo\Stored Procedures\Department" />
+    <Folder Include="dbo\Stored Procedures\Employee" />
+    <Folder Include="dbo\Stored Procedures\Manufacturer" />
+    <Folder Include="dbo\Stored Procedures\OrderProcess" />
+    <Folder Include="dbo\Stored Procedures\OrderLine" />
+    <Folder Include="dbo\Stored Procedures\OrderStatus" />
+    <Folder Include="dbo\Stored Procedures\PaymentMethod" />
+    <Folder Include="dbo\Stored Procedures\Position" />
+    <Folder Include="dbo\Stored Procedures\Product" />
+    <Folder Include="dbo\Stored Procedures\Warehouse" />
+    <Folder Include="dbo\Stored Procedures\Warehouse_Product" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Category.sql" />
+    <Build Include="dbo\Tables\Country.sql" />
+    <Build Include="dbo\Tables\Courier.sql" />
+    <Build Include="dbo\Tables\Customer.sql" />
+    <Build Include="dbo\Tables\CustomerOrder.sql" />
+    <Build Include="dbo\Tables\Department.sql" />
+    <Build Include="dbo\Tables\Employee.sql" />
+    <Build Include="dbo\Tables\Manufacturer.sql" />
+    <Build Include="dbo\Tables\OrderLine.sql" />
+    <Build Include="dbo\Tables\OrderProcess.sql" />
+    <Build Include="dbo\Tables\OrderStatus.sql" />
+    <Build Include="dbo\Tables\PaymentMethod.sql" />
+    <Build Include="dbo\Tables\Position.sql" />
+    <Build Include="dbo\Tables\Product.sql" />
+    <Build Include="dbo\Tables\Warehouse.sql" />
+    <Build Include="dbo\Tables\Warehouse_Product.sql" />
+    <Build Include="dbo\Tables\Zip.sql" />
+    <Build Include="dbo\Types\CustomerType.sql" />
+    <Build Include="dbo\Stored Procedures\Category\spCategory_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Category\spCategory_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Category\spCategory_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Category\spCategory_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Category\spCategory_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Country\spCountry_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Country\spCountry_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Country\spCountry_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Country\spCountry_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Country\spCountry_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Courier\spCourier_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Courier\spCourier_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Courier\spCourier_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Courier\spCourier_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Courier\spCourier_Update.sql" />
+    <Build Include="dbo\Tables\ApplicationUser.sql" />
+    <Build Include="dbo\Stored Procedures\Customer\spCustomer_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Customer\spCustomer_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Customer\spCustomer_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Customer\spCustomer_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Customer\spCustomer_Update.sql" />
+    <Build Include="dbo\Stored Procedures\CustomerOrder\spCustomerOrder_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\CustomerOrder\spCustomerOrder_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\CustomerOrder\spCustomerOrder_GetAllByCustomerId.sql" />
+    <Build Include="dbo\Stored Procedures\CustomerOrder\spCustomerOrder_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\CustomerOrder\spCustomerOrder_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Department\spDepartment_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Department\spDepartment_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Department\spDepartment_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Department\spDepartment_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Department\spDepartment_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Employee\spEmployee_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Employee\spEmployee_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Employee\spEmployee_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Employee\spEmployee_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Employee\spEmployee_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Manufacturer\spManufacturer_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Manufacturer\spManufacturer_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Manufacturer\spManufacturer_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Manufacturer\spManufacturer_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Manufacturer\spManufacturer_Update.sql" />
+    <Build Include="dbo\Stored Procedures\OrderLine\spOrderLine_DeleteByCustomerOrderId.sql" />
+    <Build Include="dbo\Stored Procedures\OrderLine\spOrderLine_GetByCustomerOrderId.sql" />
+    <Build Include="dbo\Stored Procedures\OrderLine\spOrderLine_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\OrderProcess\spOrderProcess_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\OrderProcess\spOrderProcess_GetByCustomerOrderId.sql" />
+    <Build Include="dbo\Stored Procedures\OrderProcess\spOrderProcess_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\OrderStatus\spOrderStatus_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\OrderStatus\spOrderStatus_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\OrderStatus\spOrderStatus_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\OrderStatus\spOrderStatus_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\OrderStatus\spOrderStatus_Update.sql" />
+    <Build Include="dbo\Stored Procedures\PaymentMethod\spPaymentMethod_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\PaymentMethod\spPaymentMethod_Update.sql" />
+    <Build Include="dbo\Stored Procedures\PaymentMethod\spPaymentMethod_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\PaymentMethod\spPaymentMethod_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\PaymentMethod\spPaymentMethod_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Position\spPosition_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Position\spPosition_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Position\spPosition_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Position\spPosition_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Position\spPosition_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Product\spProduct_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Product\spProduct_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Product\spProduct_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Product\spProduct_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Product\spProduct_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Product\spProduct_GetByManufacturerId.sql" />
+    <Build Include="dbo\Stored Procedures\Product\spProduct_GetByCategoryId.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse\spWarehouse_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse\spWarehouse_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse\spWarehouse_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse\spWarehouse_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse\spWarehouse_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_DeleteByWarehouseId.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_GetByProductId.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_GetByWarehouseId.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_UpdateQuantity.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+</Project>

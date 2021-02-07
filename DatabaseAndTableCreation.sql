@@ -9,7 +9,7 @@ GO
 CREATE TABLE Country
 (
 	Id INT NOT NULL IDENTITY(0,1),
-	Name NVARCHAR(100) NOT NULL,
+	[Name] NVARCHAR(100) NOT NULL,
 	CONSTRAINT PK_Country_Id PRIMARY KEY (Id)
 )
 GO
@@ -33,7 +33,7 @@ CREATE TABLE Zip
 (
 	Id INT NOT NULL IDENTITY(0,1),
 	ZipCode VARCHAR(50) NOT NULL,
-	City NVARCHAR(100) NOT NULL,
+	CityName NVARCHAR(100) NOT NULL,
 	Country_Id INT NOT NULL,
 	CONSTRAINT PK_Zip_Id PRIMARY KEY (Id),
 	CONSTRAINT FK_Zip_Country FOREIGN KEY (Country_Id) REFERENCES dbo.Country(Id)
@@ -41,7 +41,7 @@ CREATE TABLE Zip
 GO
 
 --/////////////// Insert into Zip Table ///////////////
-INSERT INTO dbo.Zip(ZipCode, City, Country_Id)
+INSERT INTO dbo.Zip(ZipCode, CityName, Country_Id)
 VALUES
 ('5000', 'Odense', 0), --Danmark
 ('10117', 'Berlin', 1), --Tyskland
@@ -63,7 +63,7 @@ CREATE TABLE Warehouse
 (
 	Id INT NOT NULL IDENTITY(0,1),
 	Name VARCHAR(50) NULL,
-	Address NVARCHAR(100) NOT NULL,
+	AddressLane NVARCHAR(100) NOT NULL,
 	Zip_Id INT NOT NULL,
 	CONSTRAINT PK_Warehouse_Id PRIMARY KEY (Id),
 	CONSTRAINT FK_Warehouse_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id)
@@ -71,7 +71,7 @@ CREATE TABLE Warehouse
 GO
 
 --/////////////// Insert into Warehouse Table ///////////////
-INSERT INTO dbo.Warehouse(Name, Address, Zip_Id)
+INSERT INTO dbo.Warehouse(Name, AddressLane, Zip_Id)
 VALUES
 ('Varelager Odense', 'Centrumvej 13', 0), --Danmark
 ('Das Feine Haus', 'Grosse Strasse 58', 1), --Tyskland
@@ -143,7 +143,7 @@ CREATE TABLE Product
 	Id INT NOT NULL IDENTITY(0,1),
 	Name NVARCHAR(150) NOT NULL,
 	Price DECIMAL(7,2) NOT NULL,
-	EAN VARCHAR(20) NULL,
+	EAN VARCHAR(13) NULL,
 	WeightGram INT NOT NULL,
 	Manufacturer_Id INT NOT NULL,
 	Category_Id INT NOT NULL,
@@ -184,7 +184,7 @@ SELECT * FROM dbo.Category
 --DROP TABLE IF EXISTS bigshop.dbo.Warehouse_Product;
 CREATE TABLE Warehouse_Product
 (
-	Quantity INT NOT NULL,
+	Quantity INT NOT NULL DEFAULT 0,
 	Product_Id INT NOT NULL,
 	Warehouse_Id INT NOT NULL,
 	CONSTRAINT FK_Warehouse_Product_Product FOREIGN KEY (Product_Id) REFERENCES Product(Id),
@@ -306,6 +306,25 @@ LEFT JOIN Country cn
 ON z.Country_Id = cn.Id
 ORDER BY p.Id ASC, cn.Name ASC
 
+---------------- ApplicationUser Table -------------------
+--DROP TABLE IF EXISTS bigshop.dbo.applicationuser;
+CREATE TABLE ApplicationUser
+(
+	Id INT NOT NULL IDENTITY(0,1),
+	Username VARCHAR(20) NULL,
+	NormalizedUsername VARCHAR(20) NULL,
+	PasswordHash NVARCHAR(MAX) NULL,
+	CONSTRAINT PK_ApplicationUser_Id PRIMARY KEY (Id)
+)
+
+--/////////////// Insert into ApplicationUser Table ///////////////
+INSERT INTO dbo.ApplicationUser(Username, NormalizedUsername, PasswordHash)
+VALUES
+('CUSTOMER','customer', 'Admin123'), --Customer
+('EMPLOYEE','employee', 'Admin123') --Employee
+
+
+
 ---------------- Customer Table -------------------
 --DROP TABLE IF EXISTS bigshop.dbo.Customer;
 CREATE TABLE Customer
@@ -318,20 +337,22 @@ CREATE TABLE Customer
 	AddressLane NVARCHAR(100) NOT NULL,
 	Phone VARCHAR(50) NOT NULL,
 	Zip_Id INT NOT NULL,
+	ApplicationUser_Id INT NOT NULL,
 	CONSTRAINT PK_Customer_Id PRIMARY KEY (Id),
 	CONSTRAINT UNIQUE_Customer_NormalizedEmail UNIQUE(NormalizedEmail),
-	CONSTRAINT FK_Customer_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id)
+	CONSTRAINT FK_Customer_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id),
+	CONSTRAINT FK_Customer_ApplicationUser FOREIGN KEY (ApplicationUser_Id) REFERENCES ApplicationUser(Id)
 )
 GO
 
 --/////////////// Insert into Customer Table ///////////////
-INSERT INTO dbo.Customer(FirstName, LastName, Email, NormalizedEmail, AddressLane, Phone, Zip_Id)
+INSERT INTO dbo.Customer(FirstName, LastName, Email, NormalizedEmail, AddressLane, Phone, Zip_Id, ApplicationUser_Id)
 VALUES
-(N'Jørgen', N'Ådahl', 'JAA@karma.dk', 'jaa@karma.dk', 'Strandvej 115', '65487566', 0), --5000, Danmark
-(N'Miauw', N'Katzemann', 'NYAAA@cat.de', 'nyaaa@cat.de', 'Eine kleine katzmuzik 44', '55213687', 1), --10117, Tyskland
-(N'Michel', N'Foucault', 'discourse@lafrance.fr', 'discourse@lafrance.fr', 'Archeology of Knowlede boulevard 32', '41023698', 2), --69007, Frankrig
-(N'Bamse', N'Kylling', 'bamseogkylling@yesplz.no', 'bamseogkylling@yesplz.no', 'Oslostraede 87', '54879632', 3), --0158, Norge
-(N'Karl', N'Marx', 'marx@comm.com', 'marx@comm.com', 'Vodka lane 1', '55648975' , 4) --10100, Rusland
+(N'Jørgen', N'Ådahl', 'JAA@karma.dk', 'jaa@karma.dk', 'Strandvej 115', '65487566', 0, 0), --5000, Danmark
+(N'Miauw', N'Katzemann', 'NYAAA@cat.de', 'nyaaa@cat.de', 'Eine kleine katzmuzik 44', '55213687', 1, 0), --10117, Tyskland
+(N'Michel', N'Foucault', 'discourse@lafrance.fr', 'discourse@lafrance.fr', 'Archeology of Knowlede boulevard 32', '41023698', 2, 0), --69007, Frankrig
+(N'Bamse', N'Kylling', 'bamseogkylling@yesplz.no', 'bamseogkylling@yesplz.no', 'Oslostraede 87', '54879632', 3, 0), --0158, Norge
+(N'Karl', N'Marx', 'marx@comm.com', 'marx@comm.com', 'Vodka lane 1', '55648975' , 4, 0) --10100, Rusland
 GO
 
 SELECT * FROM Customer
@@ -458,6 +479,7 @@ LEFT JOIN CustomerOrder co
 ON ol.CustomerOrder_Id = co.Id
 LEFT JOIN Customer c
 ON co.Customer_Id = c.Id
+ORDER BY ol.Price
 
 SELECT * FROM Product
 SELECT * FROM CustomerOrder
@@ -491,22 +513,39 @@ CREATE TABLE Department
 	Id INT NOT NULL IDENTITY(0,1),
 	Name VARCHAR(50) NOT NULL,
 	Phone VARCHAR(50) NULL,
-	AddressLane NVARCHAR(100) NOT NULL,
-	Zip_Id INT NOT NULL,
 	Warehouse_Id INT NOT NULL,
 	CONSTRAINT PK_Department_Id PRIMARY KEY (Id),
-	CONSTRAINT FK_Department_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id),
 	CONSTRAINT FK_Department_Warehouse FOREIGN KEY (Warehouse_Id) REFERENCES Warehouse(Id)
 )
 
 --/////////////// Insert into Department Table ///////////////
-INSERT INTO dbo.Department(Name, Phone, AddressLane, Zip_Id, Warehouse_Id)
+INSERT INTO dbo.Department(Name, Phone, Warehouse_Id)
 VALUES
-('Odense Afdeling', '54687866', 'Fyngade 33', 0, 0), --Odense, Odense lager
-('Berlin Afdeling', '58996321', 'Deutsche weg 11', 1, 1), --Berlin, Berlin lager
-('Lyon Afdeling', '78961123', 'Bordieu la road 65', 2, 2), --Lyon, Lyon lager
-('Oslo Afdeling', '22364899', 'Norges landevej 1 ', 3, 3), --Oslo, Oslo lager
-('Moskva Afdeling', '98457832', 'Tolstoy 47', 4, 4) --Moskva, Moskva lager
+('Sales Odense', '54687866', 0), --Odense lager
+('HR Odense', '58996321', 0), --Odense lager
+('Packing Odense', '78961123', 0), --Odense lager
+('Customer service Odense', '22364899',  0), --Odense lager
+('Administration Odense', '98457832', 0), --Odense lager
+('Sales Berlin', '95214563', 1), --Berlin lager
+('HR Berlin', '85412365', 1), --Berlin lager
+('Packing Berlin', '95114266', 1), --Berlin lager
+('Customer service Berlin', '87441221',  1), --Berlin lager
+('Administration Berlin', '32115568', 1), --Berlin lager
+('Sales Lyon', '35469987', 2), --Lyon lager
+('HR Lyon', '20365985', 2), --Lyon lager
+('Packing Lyon', '30526698', 2), --Lyon lager
+('Customer service Lyon', '21565048',  2), --Lyon lager
+('Administration Lyon', '36200355', 2), --Lyon lager
+('Sales Oslo', '98752100', 3), --Oslo lager
+('HR Oslo', '36541255', 3), --Oslo lager
+('Packing Oslo', '69844230', 3), --Oslo lager
+('Customer service Oslo', '25874123',  3), --Oslo lager
+('Administration Oslo', '10254863', 3), -- Oslo lager
+('Sales Moskva', '98522230', 4), --Moskva lager
+('HR Moskva', '87885200', 4), --Moskva lager
+('Packing Moskva', '65853400', 4), --Moskva lager
+('Customer service Moskva', '35426899',  4), --Moskva lager
+('Administration Moskva', '32456977', 4) -- Moskva lager
 
 SELECT * FROM dbo.Department
 
@@ -524,23 +563,25 @@ CREATE TABLE Employee
 	Phone VARCHAR(50) NULL,
 	Position_Id INT NOT NULL,
 	Department_Id INT NOT NULL,
+	ApplicationUser_Id INT NOT NULL,
 	CONSTRAINT PK_Employee_Id PRIMARY KEY (Id),
 	CONSTRAINT FK_Employee_Position FOREIGN KEY (Position_Id) REFERENCES Position(Id),
-	CONSTRAINT FK_Employee_Deparment FOREIGN KEY (Department_Id) REFERENCES Department(Id)
+	CONSTRAINT FK_Employee_Deparment FOREIGN KEY (Department_Id) REFERENCES Department(Id),
+	CONSTRAINT FK_Employee_ApplicationUser FOREIGN KEY (ApplicationUser_Id) REFERENCES ApplicationUser(Id)
 )
 
 
 --/////////////// Insert into Employee Table ///////////////
-INSERT INTO dbo.Employee(FirstName, LastName, Email, Phone, Position_Id, Department_Id)
+INSERT INTO dbo.Employee(FirstName, LastName, Email, Phone, Position_Id, Department_Id, ApplicationUser_Id)
 VALUES
-('Thomas', 'Josefsen', 'odense@bigshop.com', '21354685', 1, 0), --Odense afdeling, warehouse worker
-('Marie', 'Karlsen', 'odense@bigshop.com', '65478522', 2, 0), --Odense afdeling, packaging
-('Louise', 'Kofoed', 'berlin@bigshop.com', '54853612', 4, 1), --Berlin afdeling, Salesman
-('Karen', 'Michelin', 'berlin@bigshop.com', '85469632', 2, 1), --Berlin afdeling, packaging
-('Lars', 'Olsen', 'lyon@bigshop.com', '54632111', 5, 2), --Lyon afdeling, Department leader
-('Trevor', 'Noah', 'oslo@bigshop.com', '55689412', 1, 3), --Oslo afdeling, warehouse worker
-('Botan', 'Sisiro', 'moskva@bigshop.com', '44522133', 6, 4), --Moskva afdeling, customer service
-('Polka', 'Omaru', 'moskva@bigshop.com', '87965521', 1, 4) --Moskva afdeling, warehouse worker
+('Thomas', 'Josefsen', 'odense@bigshop.com', '21354685', 1, 0, 1), --Odense afdeling, warehouse worker
+('Marie', 'Karlsen', 'odense@bigshop.com', '65478522', 2, 0, 1), --Odense afdeling, packaging
+('Louise', 'Kofoed', 'berlin@bigshop.com', '54853612', 4, 1, 1), --Berlin afdeling, Salesman
+('Karen', 'Michelin', 'berlin@bigshop.com', '85469632', 2, 1, 1), --Berlin afdeling, packaging
+('Lars', 'Olsen', 'lyon@bigshop.com', '54632111', 5, 2, 1), --Lyon afdeling, Department leader
+('Trevor', 'Noah', 'oslo@bigshop.com', '55689412', 1, 3, 1), --Oslo afdeling, warehouse worker
+('Botan', 'Sisiro', 'moskva@bigshop.com', '44522133', 6, 4, 1), --Moskva afdeling, customer service
+('Polka', 'Omaru', 'moskva@bigshop.com', '87965521', 1, 4, 1) --Moskva afdeling, warehouse worker
 
 SELECT e.Id, CONCAT_WS(' ', e.FirstName, e.LastName) as 'Name', e.Email, e.Phone, p.Name as 'Position', d.Name as 'Department'
 FROM dbo.Employee e
@@ -616,7 +657,7 @@ ON op.OrderStatus_Id = os.Id
 
 
 
-select co.Id, co.OrderDate, z.City 
+select co.Id, co.OrderDate, z.CityName 
 from CustomerOrder co
 left join Customer c
 on co.Customer_Id = c.Id
@@ -632,3 +673,15 @@ ON e.Position_Id = p.Id
 LEFT JOIN dbo.Department d
 ON e.Department_Id = d.Id
 ORDER BY Id
+
+
+------------------------VIEWS------------------------
+CREATE VIEW [dbo].[Customer_View]
+AS 
+	SELECT c.Id, c.FirstName, c.LastName, c.Email, c.Phone, z.ZipCode, cn.Name 
+	FROM [dbo].[Customer] c
+	LEFT JOIN [dbo].[Zip] z
+	ON c.[Zip_Id] = z.[Id]
+	LEFT JOIN [dbo].Country cn
+	ON z.[Country_Id] = cn.[Id]
+

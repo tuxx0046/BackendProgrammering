@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Warehouse]
+(
+	[Id] INT NOT NULL IDENTITY(0,1),
+	[Name] VARCHAR(50) NULL,
+	[AddressLane] NVARCHAR(100) NOT NULL,
+	[Zip_Id] INT NOT NULL,
+	CONSTRAINT PK_Warehouse_Id PRIMARY KEY (Id),
+	CONSTRAINT FK_Warehouse_Zip FOREIGN KEY (Zip_Id) REFERENCES Zip(Id)
+)

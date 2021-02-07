@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Zip]
+(
+	[Id] INT NOT NULL IDENTITY(0,1),
+	[ZipCode] VARCHAR(50) NOT NULL,
+	[CityName] NVARCHAR(100) NOT NULL,
+	[Country_Id] INT NOT NULL,
+	CONSTRAINT PK_Zip_Id PRIMARY KEY (Id),
+	CONSTRAINT FK_Zip_Country FOREIGN KEY (Country_Id) REFERENCES dbo.Country(Id)
+)
