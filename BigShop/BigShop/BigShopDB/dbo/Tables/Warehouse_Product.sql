@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Warehouse_Product]
 (
-	[Quantity] INT NOT NULL,
+	[Quantity] INT NOT NULL DEFAULT 0,
 	[Product_Id] INT NOT NULL,
 	[Warehouse_Id] INT NOT NULL,
 	CONSTRAINT FK_Warehouse_Product_Product FOREIGN KEY (Product_Id) REFERENCES Product(Id),
