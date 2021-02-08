@@ -77,6 +77,8 @@
     <Folder Include="dbo\Stored Procedures\Product" />
     <Folder Include="dbo\Stored Procedures\Warehouse" />
     <Folder Include="dbo\Stored Procedures\Warehouse_Product" />
+    <Folder Include="dbo\Stored Procedures\Zip" />
+    <Folder Include="dbo\Stored Procedures\ApplicationUser" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Category.sql" />
@@ -178,6 +180,17 @@
     <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_GetByWarehouseId.sql" />
     <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_UpdateQuantity.sql" />
+    <Build Include="dbo\Stored Procedures\Zip\spZip_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Zip\spZip_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Zip\spZip_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Zip\spZip_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Zip\spZip_GetByCountryId.sql" />
+    <Build Include="dbo\Stored Procedures\ApplicationUser\spApplicationUser_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\ApplicationUser\spApplicationUser_Update.sql" />
+    <Build Include="dbo\Stored Procedures\ApplicationUser\spApplicationUser_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\ApplicationUser\spApplicationUser_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\ApplicationUser\spApplicationUser_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Customer\spCustomer_GetByApplicationUserId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

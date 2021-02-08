@@ -1,0 +1,9 @@
+﻿CREATE PROCEDURE [dbo].[spZip_Delete]
+	@Id INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	DELETE
+	FROM dbo.[Zip]
+	WHERE Id = @Id
+END
