@@ -192,9 +192,9 @@
     <Build Include="dbo\Stored Procedures\Customer\spCustomer_GetByApplicationUserId.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+    <None Include="BigShopDB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BigShopDB.publish.xml" />
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

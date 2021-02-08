@@ -41,7 +41,7 @@ BEGIN
         ('Das Feine Haus', 'Grosse Strasse 58', 1), --Tyskland
         ('Viva La France', 'Calvados 27', 2), --Frankrig
         ('Varehus Norge', 'Snevei 8', 3), --Norge
-        (NULL, N'король Лев', 4) --Rusland
+        ('Rusland Varehus', N'король Лев', 4) --Rusland
 END
 
 IF NOT EXISTS (SELECT * FROM [dbo].[Category])
@@ -222,11 +222,11 @@ IF NOT EXISTS (SELECT * FROM [dbo].[Customer])
 BEGIN
     INSERT INTO [dbo].[Customer]([FirstName], [LastName], [AddressLane], [Phone], [Zip_Id], [ApplicationUser_Id])
     VALUES
-        (N'Jørgen', N'Ådahl', 'JAA@karma.dk', 'jaa@karma.dk', 'Strandvej 115', '65487566', 0, 0), --5000, Danmark
-        (N'Miauw', N'Katzemann', 'NYAAA@cat.de', 'nyaaa@cat.de', 'Eine kleine katzmuzik 44', '55213687', 1, 1), --10117, Tyskland
-        (N'Michel', N'Foucault', 'discourse@lafrance.fr', 'discourse@lafrance.fr', 'Archeology of Knowlede boulevard 32', '41023698', 2, 2), --69007, Frankrig
-        (N'Bamse', N'Kylling', 'bamseogkylling@yesplz.no', 'bamseogkylling@yesplz.no', 'Oslostraede 87', '54879632', 3, 3), --0158, Norge
-        (N'Karl', N'Marx', 'marx@comm.com', 'marx@comm.com', 'Vodka lane 1', '55648975' , 4, 4) --10100, Rusland
+        (N'Jørgen', N'Ådahl', 'Strandvej 115', '65487566', 0, 0), --5000, Danmark
+        (N'Miauw', N'Katzemann', 'Eine kleine katzmuzik 44', '55213687', 1, 1), --10117, Tyskland
+        (N'Michel', N'Foucault', 'Archeology of Knowlede boulevard 32', '41023698', 2, 2), --69007, Frankrig
+        (N'Bamse', N'Kylling', 'Oslostraede 87', '54879632', 3, 3), --0158, Norge
+        (N'Karl', N'Marx', 'Vodka lane 1', '55648975' , 4, 4) --10100, Rusland
 END
 
 IF NOT EXISTS (SELECT * FROM [dbo].[PaymentMethod])

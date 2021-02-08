@@ -6,6 +6,5 @@
 	[Email] VARCHAR(50) NOT NULL,
 	[NormalizedEmail] VARCHAR(50) NULL,
 	[PasswordHash] NVARCHAR(MAX) NULL,
-	CONSTRAINT PK_ApplicationUser_Id PRIMARY KEY (Id),
-	CONSTRAINT UNIQUE_ApplicationUser_NormalizedEmail UNIQUE(NormalizedEmail)
+	CONSTRAINT PK_ApplicationUser_Id PRIMARY KEY (Id)
 )
