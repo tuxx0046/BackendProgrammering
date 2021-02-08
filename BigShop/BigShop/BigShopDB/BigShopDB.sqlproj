@@ -173,7 +173,6 @@
     <Build Include="dbo\Stored Procedures\Warehouse\spWarehouse_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Warehouse\spWarehouse_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Warehouse\spWarehouse_GetAll.sql" />
-    <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_DeleteByWarehouseId.sql" />
     <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_GetByProductId.sql" />
@@ -194,5 +193,8 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BigShopDB.publish.xml" />
   </ItemGroup>
 </Project>
