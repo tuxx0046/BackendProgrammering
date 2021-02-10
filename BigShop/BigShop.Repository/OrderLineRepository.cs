@@ -1,6 +1,7 @@
 ﻿using BigShop.DataAccess.Db;
 using BigShop.Models.OrderLine;
 using Dapper;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BigShop.Repository
 {
-    public class OrderLineRepository
+    public class OrderLineRepository : IOrderLineRepository
     {
         private readonly IDataAccess _dataAccess;
         private readonly ConnectionStringData _connectionString;
@@ -20,8 +21,10 @@ namespace BigShop.Repository
             _connectionString = connectionString;
         }
 
-        public void CreateAsync(List<OrderLineCreate> orderLineCreate)
+        public async Task<int> CreateAsync(List<OrderLineCreate> orderLineCreate)
         {
+            int rows = 0;
+
             foreach (var item in orderLineCreate)
             {
                 DynamicParameters p = new DynamicParameters();
@@ -30,8 +33,9 @@ namespace BigShop.Repository
                 p.Add("Product_Id", item.Product_Id);
                 p.Add("Customer_Id", item.CustomerOrder_Id);
 
-                _dataAccess.SaveData("dbo.spOrderLine_Insert", p, _connectionString.SqlConnectionName);
+                rows += await _dataAccess.SaveData("dbo.spOrderLine_Insert", p, _connectionString.SqlConnectionName);
             }
+            return rows;
         }
 
         public Task<int> DeleteByCustomerOrderIdAsync(int customerOrderId)
@@ -41,30 +45,14 @@ namespace BigShop.Repository
                                         _connectionString.SqlConnectionName);
         }
 
-        public Task<List<Manufacturer>> GetAllAsync()
+        public Task<List<OrderLine>> GetByCustomerOrderIdAsync(int customerOrderId)
         {
-            return _dataAccess.LoadData<Manufacturer, dynamic>("dbo.spManufacturer_GetAll",
-                                                             new { },
+            return _dataAccess.LoadData<OrderLine, dynamic>("dbo.spOrderLine_GetByCustomerOrderId",
+                                                             new
+                                                             {
+                                                                 CustomerOrder_Id = customerOrderId
+                                                             },
                                                              _connectionString.SqlConnectionName);
-        }
-
-        public async Task<Manufacturer> GetByIdAsync(int manufacturerId)
-        {
-            var recs = await _dataAccess.LoadData<Manufacturer, dynamic>("dbo.spManufacturer_GetById",
-                                                                       new { Id = manufacturerId },
-                                                                       _connectionString.SqlConnectionName);
-            return recs.FirstOrDefault();
-        }
-
-        public Task<int> UpdateAsync(Manufacturer updatedManufacturer)
-        {
-            return _dataAccess.SaveData("dbo.spManufacturer_Update",
-                                        new
-                                        {
-                                            Id = updatedManufacturer.Id,
-                                            Name = updatedManufacturer.Name,
-                                        },
-                                        _connectionString.SqlConnectionName);
         }
     }
 }
