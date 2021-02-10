@@ -16,13 +16,11 @@ namespace BigShop.Repository
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly IDataAccess _dataAccess;
         private readonly ConnectionStringData _connectionString;
         private readonly IConfiguration _config;
 
-        public AccountRepository(IDataAccess dataAccess, ConnectionStringData connectionString, IConfiguration config)
+        public AccountRepository(ConnectionStringData connectionString, IConfiguration config)
         {
-            _dataAccess = dataAccess;
             _connectionString = connectionString;
             _config = config;
         }

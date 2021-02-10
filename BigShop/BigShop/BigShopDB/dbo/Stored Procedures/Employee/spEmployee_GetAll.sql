@@ -1,5 +1,4 @@
 ﻿CREATE PROCEDURE [dbo].[spEmployee_GetAll]
-	@Id INT
 AS
 BEGIN
 	SET NOCOUNT ON;
