@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BigShop.Repository
 {
-    public class OrderProcessRepository
+    public class OrderProcessRepository : IOrderProcessRepository
     {
         private readonly IDataAccess _dataAccess;
         private readonly ConnectionStringData _connectionString;
@@ -23,8 +23,8 @@ namespace BigShop.Repository
         public Task<int> CreateAsync(OrderProcessCreate orderProcessCreate)
         {
             return _dataAccess.SaveData("dbo.spOrderProcess_Insert",
-                                        new 
-                                        { 
+                                        new
+                                        {
                                             Employee_Id = orderProcessCreate.Employee_Id,
                                             CustomerOrder_Id = orderProcessCreate.CustomerOrder_Id,
                                             OrderStatus_Id = orderProcessCreate.OrderStatus_Id
@@ -32,37 +32,26 @@ namespace BigShop.Repository
                                         _connectionString.SqlConnectionName);
         }
 
-        public Task<int> DeleteAsync(int manufacturerId)
+        public Task<int> DeleteByCustomerOrderIdAsync(int customerOrderId)
         {
-            return _dataAccess.SaveData("dbo.spManufacturer_Delete",
-                                        new { Id = manufacturerId },
+            return _dataAccess.SaveData("dbo.spOrderProcess_DeleteByCustomerOrderId",
+                                        new { CustomerOrder_Id = customerOrderId },
                                         _connectionString.SqlConnectionName);
         }
 
-        public Task<List<Manufacturer>> GetAllAsync()
+        public Task<List<OrderProcess>> GetAllAsync()
         {
-            return _dataAccess.LoadData<Manufacturer, dynamic>("dbo.spManufacturer_GetAll",
+            return _dataAccess.LoadData<OrderProcess, dynamic>("dbo.spOrderProcess_GetAll",
                                                              new { },
                                                              _connectionString.SqlConnectionName);
         }
 
-        public async Task<Manufacturer> GetByIdAsync(int manufacturerId)
+        public async Task<OrderProcess> GetByCustomerOrderIdAsync(int customerOrderId)
         {
-            var recs = await _dataAccess.LoadData<Manufacturer, dynamic>("dbo.spManufacturer_GetById",
-                                                                       new { Id = manufacturerId },
+            var recs = await _dataAccess.LoadData<OrderProcess, dynamic>("dbo.spOrderProcess_GetByCustomerOrderId",
+                                                                       new { Id = customerOrderId },
                                                                        _connectionString.SqlConnectionName);
             return recs.FirstOrDefault();
-        }
-
-        public Task<int> UpdateAsync(Manufacturer updatedManufacturer)
-        {
-            return _dataAccess.SaveData("dbo.spManufacturer_Update",
-                                        new
-                                        {
-                                            Id = updatedManufacturer.Id,
-                                            Name = updatedManufacturer.Name,
-                                        },
-                                        _connectionString.SqlConnectionName);
         }
     }
 }

@@ -21,21 +21,27 @@ namespace BigShop.Repository
             _connectionString = connectionString;
         }
 
-        public async Task<int> CreateAsync(List<OrderLineCreate> orderLineCreate)
+        public Task<int> CreateAsync(List<OrderLineCreate> orderLineCreate)
         {
-            int rows = 0;
+            #region Loop solution
+            //int rows = 0;
 
-            foreach (var item in orderLineCreate)
-            {
-                DynamicParameters p = new DynamicParameters();
-                p.Add("Quantity", item.Quantity);
-                p.Add("Price", item.Price);
-                p.Add("Product_Id", item.Product_Id);
-                p.Add("Customer_Id", item.CustomerOrder_Id);
+            //foreach (var item in orderLineCreate)
+            //{
+            //    DynamicParameters p = new DynamicParameters();
+            //    p.Add("Quantity", item.Quantity);
+            //    p.Add("Price", item.Price);
+            //    p.Add("Product_Id", item.Product_Id);
+            //    p.Add("Customer_Id", item.CustomerOrder_Id);
 
-                rows += await _dataAccess.SaveData("dbo.spOrderLine_Insert", p, _connectionString.SqlConnectionName);
-            }
-            return rows;
+            //    rows += await _dataAccess.SaveData("dbo.spOrderLine_Insert", p, _connectionString.SqlConnectionName);
+            //}
+            //return rows;
+            #endregion
+            
+            return _dataAccess.SaveData("dbo.spOrderLine_Insert",
+                                        orderLineCreate,
+                                        _connectionString.SqlConnectionName);
         }
 
         public Task<int> DeleteByCustomerOrderIdAsync(int customerOrderId)
