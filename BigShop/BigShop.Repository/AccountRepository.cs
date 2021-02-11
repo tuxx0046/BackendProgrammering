@@ -54,7 +54,7 @@ namespace BigShop.Repository
             p.Add("Email", user.Email);
             p.Add("NormalizedEmail", user.NormalizedEmail);
             p.Add("PasswordHash", user.PasswordHash);
-            p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+            //p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             using (var connection = new SqlConnection(_config.GetConnectionString(_connectionString.SqlConnectionName)))
             {

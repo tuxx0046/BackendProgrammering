@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigShop.DataAccess", "BigSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigShop.Models", "BigShop.Models\BigShop.Models.csproj", "{4DD43FEE-7305-4049-A98E-9388B14BE04F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigShop.Web", "BigShop.Web\BigShop.Web.csproj", "{0ABB079A-3257-431C-9813-87CB4C4985E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigShop.Web", "BigShop.Web\BigShop.Web.csproj", "{0ABB079A-3257-431C-9813-87CB4C4985E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigShop.Repository", "..\BigShop.Repository\BigShop.Repository.csproj", "{D3599947-A0C9-4AC1-8BAF-6938B5432CA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigShop.Repository", "..\BigShop.Repository\BigShop.Repository.csproj", "{D3599947-A0C9-4AC1-8BAF-6938B5432CA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigShop.Identity", "BigShop.Identity\BigShop.Identity.csproj", "{A35D7687-8207-452F-9FC1-CA1B7C5BE8BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{D3599947-A0C9-4AC1-8BAF-6938B5432CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3599947-A0C9-4AC1-8BAF-6938B5432CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3599947-A0C9-4AC1-8BAF-6938B5432CA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A35D7687-8207-452F-9FC1-CA1B7C5BE8BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A35D7687-8207-452F-9FC1-CA1B7C5BE8BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A35D7687-8207-452F-9FC1-CA1B7C5BE8BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A35D7687-8207-452F-9FC1-CA1B7C5BE8BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
