@@ -60,7 +60,7 @@ namespace BigShop.Repository
                                         new
                                         {
                                             Id = updatedManufacturer.Id,
-                                            Name = updatedManufacturer.Name,
+                                            Name = updatedManufacturer.Name
                                         },
                                         _connectionString.SqlConnectionName);
         }

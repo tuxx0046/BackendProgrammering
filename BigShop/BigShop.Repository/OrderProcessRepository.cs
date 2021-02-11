@@ -49,7 +49,7 @@ namespace BigShop.Repository
         public async Task<OrderProcess> GetByCustomerOrderIdAsync(int customerOrderId)
         {
             var recs = await _dataAccess.LoadData<OrderProcess, dynamic>("dbo.spOrderProcess_GetByCustomerOrderId",
-                                                                       new { Id = customerOrderId },
+                                                                       new { CustomerOrder_Id = customerOrderId },
                                                                        _connectionString.SqlConnectionName);
             return recs.FirstOrDefault();
         }
