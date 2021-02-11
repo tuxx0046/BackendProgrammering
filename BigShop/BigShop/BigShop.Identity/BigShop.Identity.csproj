@@ -4,4 +4,13 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BigShop.Repository\BigShop.Repository.csproj" />
+    <ProjectReference Include="..\BigShop.Models\BigShop.Models.csproj" />
+  </ItemGroup>
+
 </Project>
