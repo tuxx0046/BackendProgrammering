@@ -4,4 +4,15 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BigShop.Repository\BigShop.Repository.csproj" />
+    <ProjectReference Include="..\..\BigShop.Services\BigShop.Services.csproj" />
+    <ProjectReference Include="..\BigShop.DataAccess\BigShop.DataAccess.csproj" />
+    <ProjectReference Include="..\BigShop.Identity\BigShop.Identity.csproj" />
+  </ItemGroup>
+
 </Project>

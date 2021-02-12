@@ -28,7 +28,7 @@ namespace BigShop.Models.Customer
         public string AddressLane { get; set; }
         [Required(ErrorMessage = "Zip ID is required")]
         public int Zip_Id { get; set; }
-        [Required(ErrorMessage = "Application User ID is required")]
-        public int ApplicationUser_Id { get; set; }
+        //[Required(ErrorMessage = "Application User ID is required")]
+        //public int ApplicationUser_Id { get; set; }
     }
 }

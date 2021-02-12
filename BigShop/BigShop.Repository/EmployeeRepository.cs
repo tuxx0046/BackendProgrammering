@@ -29,7 +29,7 @@ namespace BigShop.Repository
             p.Add("Phone", employeeCreate.Phone);
             p.Add("Position_Id", employeeCreate.Position_Id);
             p.Add("Department_Id", employeeCreate.Department_Id);
-            p.Add("ApplicationUser_Id", employeeCreate.ApplicationUser_Id);
+            //p.Add("ApplicationUser_Id", employeeCreate.ApplicationUser_Id);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataAccess.SaveData("dbo.spEmployee_Insert", p, _connectionString.SqlConnectionName);

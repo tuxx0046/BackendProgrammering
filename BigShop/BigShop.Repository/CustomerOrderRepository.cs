@@ -55,7 +55,7 @@ namespace BigShop.Repository
         {
             return _dataAccess.LoadData<CustomerOrder, dynamic>("dbo.spCustomerOrder_GetAllByCustomerId",
                                                                 new { Customer_Id = customerId },
-                                                                _connectionString.SqlConnectionName)
+                                                                _connectionString.SqlConnectionName);
         }
 
         public async Task<CustomerOrder> GetByIdAsync(int customerOrderId)

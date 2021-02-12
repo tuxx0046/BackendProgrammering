@@ -199,34 +199,34 @@ BEGIN
         (23, 17, 4) --Samsung TV, Rusland Moskva
 END
 
-IF NOT EXISTS (SELECT * FROM [dbo].[ApplicationUser])
-BEGIN
-    INSERT INTO dbo.ApplicationUser(Username, NormalizedUsername, Email, NormalizedEmail, PasswordHash)
-    VALUES
-    ('CUSTOMER1','customer1', 'JAA@karma.dk', 'jaa@karma.dk', 'Admin123'), --Customer
-    ('CUSTOMER2','customer2', 'NYAAA@cat.de', 'nyaaa@cat.de', 'Admin123'), --Customer
-    ('CUSTOMER3','customer3', 'discourse@lafrance.fr', 'discourse@lafrance.fr', 'Admin123'), --Customer
-    ('CUSTOMER4','customer4', 'bamseogkylling@yesplz.no', 'bamseogkylling@yesplz.no', 'Admin123'), --Customer
-    ('CUSTOMER5','customer5', 'marx@comm.com', 'marx@comm.com', 'Admin123'), --Customer
-    ('EMPLOYEE1','employee1', 'odense@bigshop.com', 'odense@bigshop.com', 'Admin123'), --Employee
-    ('EMPLOYEE2','employee2', 'odense@bigshop.com', 'odense@bigshop.com', 'Admin123'), --Employee
-    ('EMPLOYEE3','employee3', 'berlin@bigshop.com', 'berlin@bigshop.com', 'Admin123'), --Employee
-    ('EMPLOYEE4','employee4', 'berlin@bigshop.com', 'berlin@bigshop.com', 'Admin123'), --Employee
-    ('EMPLOYEE5','employee5', 'lyon@bigshop.com', 'lyon@bigshop.com', 'Admin123'), --Employee
-    ('EMPLOYEE6','employee6', 'oslo@bigshop.com', 'oslo@bigshop.com', 'Admin123'), --Employee
-    ('EMPLOYEE7','employee7', 'moskva@bigshop.com', 'moskva@bigshop.com', 'Admin123'), --Employee
-    ('EMPLOYEE8','employee8', 'moskva@bigshop.com', 'moskva@bigshop.com', 'Admin123') --Employee
-END
+--IF NOT EXISTS (SELECT * FROM [dbo].[ApplicationUser])
+--BEGIN
+--    INSERT INTO dbo.ApplicationUser(Username, NormalizedUsername, Email, NormalizedEmail, PasswordHash)
+--    VALUES
+--    ('CUSTOMER1','customer1', 'JAA@karma.dk', 'jaa@karma.dk', 'Admin123'), --Customer
+--    ('CUSTOMER2','customer2', 'NYAAA@cat.de', 'nyaaa@cat.de', 'Admin123'), --Customer
+--    ('CUSTOMER3','customer3', 'discourse@lafrance.fr', 'discourse@lafrance.fr', 'Admin123'), --Customer
+--    ('CUSTOMER4','customer4', 'bamseogkylling@yesplz.no', 'bamseogkylling@yesplz.no', 'Admin123'), --Customer
+--    ('CUSTOMER5','customer5', 'marx@comm.com', 'marx@comm.com', 'Admin123'), --Customer
+--    ('EMPLOYEE1','employee1', 'odense@bigshop.com', 'odense@bigshop.com', 'Admin123'), --Employee
+--    ('EMPLOYEE2','employee2', 'odense@bigshop.com', 'odense@bigshop.com', 'Admin123'), --Employee
+--    ('EMPLOYEE3','employee3', 'berlin@bigshop.com', 'berlin@bigshop.com', 'Admin123'), --Employee
+--    ('EMPLOYEE4','employee4', 'berlin@bigshop.com', 'berlin@bigshop.com', 'Admin123'), --Employee
+--    ('EMPLOYEE5','employee5', 'lyon@bigshop.com', 'lyon@bigshop.com', 'Admin123'), --Employee
+--    ('EMPLOYEE6','employee6', 'oslo@bigshop.com', 'oslo@bigshop.com', 'Admin123'), --Employee
+--    ('EMPLOYEE7','employee7', 'moskva@bigshop.com', 'moskva@bigshop.com', 'Admin123'), --Employee
+--    ('EMPLOYEE8','employee8', 'moskva@bigshop.com', 'moskva@bigshop.com', 'Admin123') --Employee
+--END
 
 IF NOT EXISTS (SELECT * FROM [dbo].[Customer])
 BEGIN
-    INSERT INTO [dbo].[Customer]([FirstName], [LastName], [AddressLane], [Phone], [Zip_Id], [ApplicationUser_Id])
+    INSERT INTO [dbo].[Customer]([FirstName], [LastName], [AddressLane], [Phone], [Zip_Id])
     VALUES
-        (N'Jørgen', N'Ådahl', 'Strandvej 115', '65487566', 0, 0), --5000, Danmark
-        (N'Miauw', N'Katzemann', 'Eine kleine katzmuzik 44', '55213687', 1, 1), --10117, Tyskland
-        (N'Michel', N'Foucault', 'Archeology of Knowlede boulevard 32', '41023698', 2, 2), --69007, Frankrig
-        (N'Bamse', N'Kylling', 'Oslostraede 87', '54879632', 3, 3), --0158, Norge
-        (N'Karl', N'Marx', 'Vodka lane 1', '55648975' , 4, 4) --10100, Rusland
+        (N'Jørgen', N'Ådahl', 'Strandvej 115', '65487566', 0), --5000, Danmark
+        (N'Miauw', N'Katzemann', 'Eine kleine katzmuzik 44', '55213687', 1), --10117, Tyskland
+        (N'Michel', N'Foucault', 'Archeology of Knowlede boulevard 32', '41023698', 2), --69007, Frankrig
+        (N'Bamse', N'Kylling', 'Oslostraede 87', '54879632', 3), --0158, Norge
+        (N'Karl', N'Marx', 'Vodka lane 1', '55648975' , 4) --10100, Rusland
 END
 
 IF NOT EXISTS (SELECT * FROM [dbo].[PaymentMethod])
@@ -319,16 +319,16 @@ END
 
 IF NOT EXISTS (SELECT * FROM [dbo].[Employee])
 BEGIN
-    INSERT INTO [dbo].[Employee]([FirstName], [LastName], [Phone], [Position_Id], [Department_Id], [ApplicationUser_Id])
+    INSERT INTO [dbo].[Employee]([FirstName], [LastName], [Phone], [Position_Id], [Department_Id])
     VALUES
-        ('Thomas', 'Josefsen', '21354685', 1, 0, 5), --Odense afdeling, warehouse worker
-        ('Marie', 'Karlsen', '65478522', 2, 0, 6), --Odense afdeling, packaging
-        ('Louise', 'Kofoed', '54853612', 4, 1, 7), --Berlin afdeling, Salesman
-        ('Karen', 'Michelin', '85469632', 2, 1, 8), --Berlin afdeling, packaging
-        ('Lars', 'Olsen', '54632111', 5, 2, 9), --Lyon afdeling, Department leader
-        ('Trevor', 'Noah', '55689412', 1, 3, 10), --Oslo afdeling, warehouse worker
-        ('Botan', 'Sisiro', '44522133', 6, 4, 11), --Moskva afdeling, customer service
-        ('Polka', 'Omaru', '87965521', 1, 4, 12) --Moskva afdeling, warehouse worker
+        ('Thomas', 'Josefsen', '21354685', 1, 0), --Odense afdeling, warehouse worker
+        ('Marie', 'Karlsen', '65478522', 2, 0), --Odense afdeling, packaging
+        ('Louise', 'Kofoed', '54853612', 4, 1), --Berlin afdeling, Salesman
+        ('Karen', 'Michelin', '85469632', 2, 1), --Berlin afdeling, packaging
+        ('Lars', 'Olsen', '54632111', 5, 2), --Lyon afdeling, Department leader
+        ('Trevor', 'Noah', '55689412', 1, 3), --Oslo afdeling, warehouse worker
+        ('Botan', 'Sisiro', '44522133', 6, 4), --Moskva afdeling, customer service
+        ('Polka', 'Omaru', '87965521', 1, 4) --Moskva afdeling, warehouse worker
 END
 
 IF NOT EXISTS (SELECT * FROM [dbo].[OrderStatus])

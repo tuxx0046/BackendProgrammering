@@ -2,6 +2,6 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SELECT [Id], [FirstName], [LastName], [Phone], [AddressLane], [Zip_Id], [ApplicationUser_Id]
+	SELECT [Id], [FirstName], [LastName], [Phone], [AddressLane], [Zip_Id]
 	FROM dbo.Customer
 END

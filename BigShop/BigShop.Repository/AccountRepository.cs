@@ -61,7 +61,14 @@ namespace BigShop.Repository
                 await connection.OpenAsync(cancellationToken);
 
                 await connection.ExecuteScalarAsync("dbo.spApplicationUser_Insert",
-                                                    p,
+                                                    new 
+                                                    { 
+                                                        Username = user.Username,
+                                                        NormalizedUsername = user.NormalizedUsername,
+                                                        Email = user.Email,
+                                                        NormalizedEmail = user.NormalizedEmail,
+                                                        PasswordHash = user.PasswordHash
+                                                    },
                                                     commandType: CommandType.StoredProcedure);
             }
 
@@ -79,7 +86,7 @@ namespace BigShop.Repository
                 await connection.OpenAsync(cancellationToken);
 
                 applicationUser = await connection.QuerySingleOrDefaultAsync<ApplicationUserIdentity>(
-                    "spApplicationUser_GetById",
+                    "dbo.spApplicationUser_GetById",
                     new { Id = id },
                     commandType: CommandType.StoredProcedure);
             }
@@ -97,7 +104,7 @@ namespace BigShop.Repository
                 await connection.OpenAsync(cancellationToken);
 
                 applicationUser = await connection.QuerySingleOrDefaultAsync<ApplicationUserIdentity>(
-                    "spApplicationUser_GetByUsername",
+                    "dbo.spApplicationUser_GetByUsername",
                     new { NormalizedUsername = normalizedUsername },
                     commandType: CommandType.StoredProcedure);
             }

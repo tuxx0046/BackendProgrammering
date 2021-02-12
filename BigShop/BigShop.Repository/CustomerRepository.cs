@@ -29,7 +29,7 @@ namespace BigShop.Repository
             p.Add("Phone", customerCreate.Phone);
             p.Add("AddressLane", customerCreate.AddressLane);
             p.Add("Zip_Id", customerCreate.Zip_Id);
-            p.Add("ApplicationUser_Id", customerCreate.ApplicationUser_Id);
+            //p.Add("ApplicationUser_Id", customerCreate.ApplicationUser_Id);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataAccess.SaveData("dbo.spCustomer_Insert", p, _connectionString.SqlConnectionName);
@@ -51,14 +51,14 @@ namespace BigShop.Repository
                                                            _connectionString.SqlConnectionName);
         }
 
-        public async Task<Customer> GetByApplicationUserIdAsync(int applicationUserId)
-        {
-            var recs = await _dataAccess.LoadData<Customer, dynamic>("dbo.spCustomer_GetByApplicationUserId",
-                                                                     new { ApplicationUser_Id = applicationUserId },
-                                                                     _connectionString.SqlConnectionName);
+        //public async Task<Customer> GetByApplicationUserIdAsync(int applicationUserId)
+        //{
+        //    var recs = await _dataAccess.LoadData<Customer, dynamic>("dbo.spCustomer_GetByApplicationUserId",
+        //                                                             new { ApplicationUser_Id = applicationUserId },
+        //                                                             _connectionString.SqlConnectionName);
 
-            return recs.FirstOrDefault();
-        }
+        //    return recs.FirstOrDefault();
+        //}
 
         public async Task<Customer> GetByIdAsync(int customerId)
         {

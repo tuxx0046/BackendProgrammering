@@ -25,7 +25,7 @@ namespace BigShop.Models.Employee
         public int Position_Id { get; set; }
         [Required]
         public int Department_Id { get; set; }
-        [Required]
-        public int ApplicationUser_Id { get; set; }
+        //[Required]
+        //public int ApplicationUser_Id { get; set; }
     }
 }
