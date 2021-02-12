@@ -5,7 +5,6 @@
 	@Zip_Id INT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	UPDATE dbo.[Warehouse]
 	SET
 		[Name] = @Name, 

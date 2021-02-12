@@ -5,7 +5,6 @@
 	@WeightFee DECIMAL(7,2)
 AS
 BEGIN
-	SET NOCOUNT ON;
 	UPDATE  dbo.[Courier]
 	SET 
 		[Name] = @Name,

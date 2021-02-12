@@ -2,7 +2,6 @@
 	@Id INT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	DELETE
 	FROM dbo.[Courier]
 	WHERE [Id] = @Id

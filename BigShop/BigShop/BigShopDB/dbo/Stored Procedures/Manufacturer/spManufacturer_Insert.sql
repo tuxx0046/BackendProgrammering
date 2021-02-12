@@ -3,7 +3,6 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	INSERT INTO dbo.[Manufacturer]([Name])
 	VALUES (@Name)
 

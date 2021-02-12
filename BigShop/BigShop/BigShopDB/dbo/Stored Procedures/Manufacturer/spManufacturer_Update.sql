@@ -3,7 +3,6 @@
 	@Name NVARCHAR(100)
 AS
 BEGIN
-	SET NOCOUNT ON;
 	UPDATE dbo.[Manufacturer]
 	SET
 		[Name] = @Name

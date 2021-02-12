@@ -4,7 +4,6 @@
 	@Warehouse_Id INT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	UPDATE dbo.[Warehouse_Product]
 	SET
 		Quantity = @Quantity

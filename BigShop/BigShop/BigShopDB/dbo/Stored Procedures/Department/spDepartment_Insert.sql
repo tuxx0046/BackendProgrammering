@@ -5,7 +5,6 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	INSERT INTO dbo.[Department]([Name], [Phone], [Warehouse_Id])
 	VALUES (@Name, @Phone, @Warehouse_Id)
 

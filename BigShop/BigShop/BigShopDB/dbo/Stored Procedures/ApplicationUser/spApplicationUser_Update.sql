@@ -7,7 +7,6 @@
 	@PasswordHash NVARCHAR(MAX)
 AS
 BEGIN
-	SET NOCOUNT ON;
 	UPDATE dbo.[ApplicationUser]
 	SET
 		Username = @Username, 

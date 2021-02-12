@@ -7,7 +7,6 @@
 	@Department_Id INT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	UPDATE dbo.[Employee]
 	SET 
 		[FirstName] = @FirstName,

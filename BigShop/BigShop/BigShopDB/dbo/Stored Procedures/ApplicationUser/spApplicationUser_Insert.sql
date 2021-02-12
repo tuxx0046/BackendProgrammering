@@ -7,7 +7,6 @@
 	--@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	INSERT INTO dbo.[ApplicationUser](Username, NormalizedUsername, Email, NormalizedEmail, PasswordHash)
 	VALUES (@Username, @NormalizedUsername, @Email, @NormalizedEmail, @PasswordHash)
 

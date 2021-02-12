@@ -5,7 +5,6 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	INSERT INTO dbo.[Warehouse]([Name], AddressLane, Zip_Id)
 	VALUES (@Name, @AddressLane, @Zip_Id)
 

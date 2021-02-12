@@ -5,7 +5,6 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	INSERT INTO dbo.[Zip](ZipCode, CityName, Country_Id)
 	VALUES (@ZipCode, @CityName, @Country_Id)
 

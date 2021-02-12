@@ -7,8 +7,6 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
-
 	INSERT INTO dbo.[CustomerOrder]([InitialShippingCost], [WeightFee], [Customer_Id], [Courier_Id], [PaymentMethod_Id])
 	VALUES (@InitialShippingCost, @WeightFee, @Customer_Id, @Courier_Id, @PaymentMethod_Id)
 

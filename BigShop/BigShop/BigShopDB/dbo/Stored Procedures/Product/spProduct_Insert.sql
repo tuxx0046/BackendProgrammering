@@ -8,7 +8,6 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	INSERT INTO dbo.[Product]([Name], Price, EAN, WeightGram, Manufacturer_Id, Category_Id)
 	VALUES (@Name, @Price, @EAN, @WeightGram, @Manufacturer_Id, @Category_Id)
 	

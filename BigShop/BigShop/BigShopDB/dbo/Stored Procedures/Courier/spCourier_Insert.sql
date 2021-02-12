@@ -5,7 +5,6 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	INSERT INTO dbo.[Courier]([Name], [InitialCost], [WeightFee])
 	VALUES (@Name, @InitialCost, @WeightFee)
 

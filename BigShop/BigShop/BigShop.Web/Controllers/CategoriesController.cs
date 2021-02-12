@@ -68,13 +68,13 @@ namespace BigShop.Web.Controllers
         [HttpDelete("{categoryId}", Name = "Delete")]
         [ProducesResponseType(204)] //no content
         [ProducesResponseType(404)]
-        public async Task<ActionResult<int>> Delete(int categoryId)
+        public async Task<ActionResult> Delete(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (category == null)
                 return NotFound($"Category with Id {categoryId} does not exist");
 
-            int affectedrows = await _categoryRepository.DeleteAsync(categoryId);
+            await _categoryRepository.DeleteAsync(categoryId);
             return NoContent();
 
         }

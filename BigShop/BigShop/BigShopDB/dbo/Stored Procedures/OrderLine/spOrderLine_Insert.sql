@@ -5,7 +5,6 @@
 	@CustomerOrder_Id INT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	INSERT INTO dbo.[OrderLine]([Quantity], [Price], [Product_Id], [CustomerOrder_Id])
 	VALUES (@Quantity, @Price, @Product_Id, @CustomerOrder_Id)
 END

@@ -8,7 +8,6 @@
 	@Category_Id INT
 AS
 BEGIN
-	SET NOCOUNT ON;
 	UPDATE dbo.[Product]
 	SET
 		[Name] = @Name,

@@ -7,8 +7,6 @@
 	@Id INT OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON;
-	
 	INSERT INTO dbo.[Employee]([FirstName], [LastName], [Phone], [Position_Id], [Department_Id])
 	VALUES (@FirstName, @LastName, @Phone, @Position_Id, @Department_Id)
 
