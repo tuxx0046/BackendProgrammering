@@ -51,39 +51,39 @@ namespace BigShop.Web.Controllers
             return Ok(category);
         }
 
-        [HttpPost]
-        [ProducesResponseType(201, Type = typeof(Review))]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult> Create([FromBody]CategoryCreate categoryCreate)
-        {
-            if (reviewToCreate == null)
-                return BadRequest(ModelState);
+        //[HttpPost]
+        //[ProducesResponseType(201, Type = typeof(Review))]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(404)]
+        //[ProducesResponseType(500)]
+        //public async Task<ActionResult> Create([FromBody]CategoryCreate categoryCreate)
+        //{
+        //    if (reviewToCreate == null)
+        //        return BadRequest(ModelState);
 
-            if (!_reviewerRepository.ReviewerExists(reviewToCreate.Reviewer.Id))
-                ModelState.AddModelError("", "Reviewer doesn't exist!");
+        //    if (!_reviewerRepository.ReviewerExists(reviewToCreate.Reviewer.Id))
+        //        ModelState.AddModelError("", "Reviewer doesn't exist!");
 
-            if (!_bookRepository.BookExists(reviewToCreate.Book.Id))
-                ModelState.AddModelError("", "Book doesn't exist!");
+        //    if (!_bookRepository.BookExists(reviewToCreate.Book.Id))
+        //        ModelState.AddModelError("", "Book doesn't exist!");
 
-            if (!ModelState.IsValid)
-                return StatusCode(404, ModelState);
+        //    if (!ModelState.IsValid)
+        //        return StatusCode(404, ModelState);
 
-            reviewToCreate.Book = _bookRepository.GetBook(reviewToCreate.Book.Id);
-            reviewToCreate.Reviewer = _reviewerRepository.GetReviewer(reviewToCreate.Reviewer.Id);
+        //    reviewToCreate.Book = _bookRepository.GetBook(reviewToCreate.Book.Id);
+        //    reviewToCreate.Reviewer = _reviewerRepository.GetReviewer(reviewToCreate.Reviewer.Id);
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
 
-            if (!_reviewRepository.CreateReview(reviewToCreate))
-            {
-                ModelState.AddModelError("", $"Something went wrong saving the review");
-                return StatusCode(500, ModelState);
-            }
+        //    if (!_reviewRepository.CreateReview(reviewToCreate))
+        //    {
+        //        ModelState.AddModelError("", $"Something went wrong saving the review");
+        //        return StatusCode(500, ModelState);
+        //    }
 
-            return CreatedAtRoute("GetReview", new { reviewId = reviewToCreate.Id }, reviewToCreate);
-        }
+        //    return CreatedAtRoute("GetReview", new { reviewId = reviewToCreate.Id }, reviewToCreate);
+        //}
 
         [Authorize]
         [HttpDelete("{id}", Name = "Delete")]
