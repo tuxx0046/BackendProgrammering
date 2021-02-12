@@ -25,22 +25,73 @@ namespace BigShop.Web.Controllers
             _productRepository = productRepository;
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Category))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> Create([FromBody] CategoryCreate categoryCreate)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return StatusCode(400, ModelState);
+            }
+
+            int newCategoryId = await _categoryRepository.CreateAsync(categoryCreate);
+            if (newCategoryId != -1)
+            {
+                var newCategory = await _categoryRepository.GetByIdAsync(newCategoryId);
+
+                return CreatedAtRoute("GetById", new { categoryId = newCategoryId }, newCategory);
+            }
+
+            return StatusCode(500);
+        }
+
+        [HttpDelete("{categoryId}", Name = "Delete")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> Delete(int categoryId)
+        {
+            var category = await _categoryRepository.GetByIdAsync(categoryId);
+            if (category == null)
+            {
+                return NotFound($"Category with Id {categoryId} does not exist");
+            }
+
+            var products = await _productRepository.GetByCategoryIdAsync(categoryId);
+            if(products.Count != 0)
+            {
+                return BadRequest("Cannot remove category while products are attached to it");
+            }
+
+            int affectedRows = await _categoryRepository.DeleteAsync(categoryId);
+            if (affectedRows > 0)
+            {
+                return NoContent();
+            }
+
+            return StatusCode(500);
+        }
+
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(List<Category>))]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Category>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<Category>>> GetAll()
         {
             var categories = await _categoryRepository.GetAllAsync();
-            if (categories == null)
+            if (categories.Count == 0)
             {
-                return BadRequest();
+                return StatusCode(404);
             }
+
             return Ok(categories);
         }
 
         [HttpGet("{categoryId}", Name = "GetById")]
-        [ProducesResponseType(200, Type = typeof(Category))]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Category))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Category>> GetById(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
@@ -51,47 +102,17 @@ namespace BigShop.Web.Controllers
             return Ok(category);
         }
 
-        [HttpPost]
-        [ProducesResponseType(201, Type = typeof(Category))]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult> Create([FromBody] CategoryCreate categoryCreate)
-        {
-            if (ModelState.IsValid == false)
-                return StatusCode(400, ModelState);
-
-            int categoryId = await _categoryRepository.CreateAsync(categoryCreate);
-            var newCategory = await _categoryRepository.GetByIdAsync(categoryId);
-            
-            return CreatedAtRoute("GetById", new { categoryId = newCategory.Id }, newCategory);
-        }
-
-        [HttpDelete("{categoryId}", Name = "Delete")]
-        [ProducesResponseType(204)] //no content
-        [ProducesResponseType(404)]
-        public async Task<ActionResult> Delete(int categoryId)
-        {
-            var category = await _categoryRepository.GetByIdAsync(categoryId);
-            if (category == null)
-                return NotFound($"Category with Id {categoryId} does not exist");
-
-            await _categoryRepository.DeleteAsync(categoryId);
-            return NoContent();
-
-        }
-
         [HttpPut("{categoryId}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Category>> Update(int categoryId, [FromBody]Category updatedCategory)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Category>> Update(int categoryId, [FromBody] Category updatedCategory)
         {
             if (categoryId != updatedCategory.Id)
             {
-                return BadRequest("Trying to edit category with other Id");
+                return BadRequest("Id does not match");
             }
-
-            if (ModelState.IsValid == false)
-                return BadRequest(ModelState);
 
             var oldCategory = await _categoryRepository.GetByIdAsync(categoryId);
             if (oldCategory == null)
@@ -99,24 +120,34 @@ namespace BigShop.Web.Controllers
                 return NotFound($"Category with Id {categoryId} not found");
             }
 
-            await _categoryRepository.UpdateAsync(updatedCategory);
+            if (ModelState.IsValid == false)
+                return BadRequest(ModelState);
 
-            return Ok();
+            int affectedRows = await _categoryRepository.UpdateAsync(updatedCategory);
+
+            if (affectedRows > 0)
+            {
+                return Ok();
+            }
+
+            return StatusCode(500);
         }
 
         [HttpGet("{categoryId}/products")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<Product>>> GetProductByCategoryId(int categoryId)
         {
-            var categoryExist = await _categoryRepository.GetByIdAsync(categoryId);
-            if (categoryExist == null)
+            var category = await _categoryRepository.GetByIdAsync(categoryId);
+            if (category == null)
             {
                 return NotFound($"Category with Id {categoryId} not found");
             }
-            
+
             var products = await _productRepository.GetByCategoryIdAsync(categoryId);
             if (products.Count == 0)
             {
-                return Ok($"No products in category \"{categoryExist.Name}\" found");
+                return Ok($"No products in category \"{category.Name}\"");
             }
 
             return Ok(products);
