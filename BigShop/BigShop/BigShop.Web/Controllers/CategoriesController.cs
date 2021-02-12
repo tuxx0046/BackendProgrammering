@@ -83,7 +83,6 @@ namespace BigShop.Web.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
         public async Task<ActionResult<Category>> Update(int categoryId, [FromBody]Category updatedCategory)
         {
             if (categoryId != updatedCategory.Id)
@@ -121,7 +120,6 @@ namespace BigShop.Web.Controllers
             }
 
             return Ok(products);
-
         }
 
     }
