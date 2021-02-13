@@ -47,7 +47,7 @@ namespace BigShop.Repository
         public Task<int> DeleteByCustomerOrderIdAsync(int customerOrderId)
         {
             return _dataAccess.SaveData("dbo.spOrderLine_DeleteByCustomerOrderId",
-                                        new { Id = customerOrderId },
+                                        new { CustomerOrder_Id = customerOrderId },
                                         _connectionString.SqlConnectionName);
         }
 

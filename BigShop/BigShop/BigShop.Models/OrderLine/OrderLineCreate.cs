@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace BigShop.Models.OrderLine
 {
-    public class OrderLineCreate
+    public class OrderLineCreate : OrderLineClientCreate
     {
-        [Required(ErrorMessage = "Quantity is required")]
-        public int Quantity { get; set; }
         [Required(ErrorMessage = "Price is required")]
         [Range(0, 9999999.99)]
         public decimal Price { get; set; }
-        [Required]
-        public int Product_Id { get; set; }
         [Required]
         public int CustomerOrder_Id { get; set; }
     }

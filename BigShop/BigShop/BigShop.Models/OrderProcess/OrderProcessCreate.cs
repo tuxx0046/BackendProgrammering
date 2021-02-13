@@ -9,8 +9,7 @@ namespace BigShop.Models.OrderProcess
 {
     public class OrderProcessCreate
     {
-        [Required(ErrorMessage = "Employee ID is required")]
-        public int Employee_Id { get; set; }
+        public int? Employee_Id { get; set; }
         [Required(ErrorMessage = "Customer Order ID is required")]
         public int CustomerOrder_Id { get; set; }
         [Required(ErrorMessage = "Order Status ID is required")]

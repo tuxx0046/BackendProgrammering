@@ -321,7 +321,7 @@ IF NOT EXISTS (SELECT * FROM [dbo].[Employee])
 BEGIN
     INSERT INTO [dbo].[Employee]([FirstName], [LastName], [Phone], [Position_Id], [Department_Id])
     VALUES
-        ('Thomas', 'Josefsen', '21354685', 1, 0), --Odense afdeling, warehouse worker
+        ('BigShop', 'BigShop', '00000000', 1, 0), --Odense afdeling, warehouse worker
         ('Marie', 'Karlsen', '65478522', 2, 0), --Odense afdeling, packaging
         ('Louise', 'Kofoed', '54853612', 4, 1), --Berlin afdeling, Salesman
         ('Karen', 'Michelin', '85469632', 2, 1), --Berlin afdeling, packaging
@@ -335,7 +335,7 @@ IF NOT EXISTS (SELECT * FROM [dbo].[OrderStatus])
 BEGIN
     INSERT INTO [dbo].[OrderStatus]([Name])
     VALUES
-        ('Started processing'),
+        ('Order placed'),
         ('Picked'),
         ('Packed'),
         ('Sent'),

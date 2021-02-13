@@ -70,7 +70,7 @@ namespace BigShop.Repository
                                             Id = updatedDepartment.Id,
                                             Name = updatedDepartment.Name,
                                             Phone = updatedDepartment.Phone,
-                                            Warehouse_Id = updatedDepartment.Id
+                                            Warehouse_Id = updatedDepartment.Warehouse_Id
                                         },
                                         _connectionString.SqlConnectionName);
         }

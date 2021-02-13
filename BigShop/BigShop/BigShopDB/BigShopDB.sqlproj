@@ -192,6 +192,7 @@
     <Build Include="dbo\Stored Procedures\ApplicationUser\spApplicationUser_GetByUsername.sql" />
     <Build Include="dbo\Stored Procedures\Warehouse_Product\spWarehouse_Product_DeleteByProductId.sql" />
     <Build Include="dbo\Stored Procedures\OrderProcess\spOrderProcess_DeleteByCustomerOrderId.sql" />
+    <Build Include="dbo\Stored Procedures\Employee\spEmployee_GetByDepartmentId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BigShopDB.publish.xml" />

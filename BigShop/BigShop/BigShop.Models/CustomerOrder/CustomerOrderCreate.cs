@@ -7,19 +7,13 @@ using System.Threading.Tasks;
 
 namespace BigShop.Models.CustomerOrder
 {
-    public class CustomerOrderCreate
+    public class CustomerOrderCreate : CustomerOrderClientCreate
     {
-        [Required(ErrorMessage = "Initial cost is required")]
+        [Required]
         [Range(0, 9999999.99)]
         public decimal InitialShippingCost { get; set; }
-        [Required(ErrorMessage = "Weight fee is required")]
+        [Required]
         [Range(0, 9999999.99)] 
         public decimal WeightFee { get; set; }
-        [Required]
-        public int Customer_Id { get; set; }
-        [Required]
-        public int Courier_Id { get; set; }
-        [Required]
-        public int PaymentMethod_Id { get; set; }
     }
 }
