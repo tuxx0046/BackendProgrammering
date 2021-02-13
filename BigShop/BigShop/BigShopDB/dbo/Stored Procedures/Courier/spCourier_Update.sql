@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spCourier_UpdateName]
+﻿CREATE PROCEDURE [dbo].[spCourier_Update]
 	@Id INT,
 	@Name VARCHAR(50),
 	@InitialCost DECIMAL(7,2),

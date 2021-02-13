@@ -1,4 +1,5 @@
 ﻿using BigShop.Models.Country;
+using BigShop.Models.Zip;
 using BigShop.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,25 +25,60 @@ namespace BigShop.Web.Controllers
             _zipRepository = zipRepository;
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> Create([FromBody]CountryCreate countryCreate)
-        //{
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Country))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> CreateCountry([FromBody] CountryCreate countryCreate)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return StatusCode(400, ModelState);
+            }
 
-        //}
+            int newCountryId = await _countryRepository.CreateAsync(countryCreate);
+            if (newCountryId != -1)
+            {
+                var newCountry = await _countryRepository.GetByIdAsync(newCountryId);
 
-        //[HttpDelete("{countryId}")]
-        //public async Task<ActionResult> Delete(int countryId)
-        //{
-        //    var category = await _categoryRepository.GetByIdAsync(categoryId);
-        //    if (category == null)
-        //        return NotFound($"Category with Id {categoryId} does not exist");
+                return CreatedAtRoute("GetByCountryId", new { countryId = newCountryId }, newCountry);
+            }
 
-        //    await _categoryRepository.DeleteAsync(categoryId);
-        //    return NoContent();
-        //}
+            return StatusCode(500);
+        }
+
+        [HttpDelete("{countryId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteCountry(int countryId)
+        {
+            var country = await _countryRepository.GetByIdAsync(countryId);
+            if (country == null)
+            {
+                return NotFound($"Country with Id {countryId} does not exist");
+            }
+
+            var zipCodes = await _zipRepository.GetByCountryIdAsync(countryId);
+            if (zipCodes.Count != 0)
+            {
+                return BadRequest("Cannot remove country while zip codes are attached to it");
+            }
+
+            int affectedRows = await _countryRepository.DeleteAsync(countryId);
+            if (affectedRows > 0)
+            {
+                return NoContent();
+            }
+
+            return StatusCode(500);
+        }
 
         [HttpGet]
-        public async Task<ActionResult<List<Country>>> GetAll()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<Country>>> GetAllCountries()
         {
             var countries = await _countryRepository.GetAllAsync();
             if (countries == null)
@@ -56,6 +92,68 @@ namespace BigShop.Web.Controllers
             }
 
             return Ok(countries);
+        }
+
+        [HttpGet("{countryId}", Name = "GetByCountryId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Country>> GetByCountryId(int countryId)
+        {
+            var country = await _countryRepository.GetByIdAsync(countryId);
+            if (country == null)
+            {
+                return NotFound($"Country with Id {countryId} does not exist");
+            }
+            return Ok(country);
+        }
+
+        [HttpPut("{countryId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateCountry(int countryId, [FromBody] Country updatedCountry)
+        {
+            if (countryId != updatedCountry.Id)
+            {
+                return BadRequest("Id does not match");
+            }
+
+            var oldCountry = await _countryRepository.GetByIdAsync(countryId);
+            if (oldCountry == null)
+            {
+                return NotFound($"Country with Id {countryId} not found");
+            }
+
+            if (ModelState.IsValid == false)
+                return BadRequest(ModelState);
+
+            int affectedRows = await _countryRepository.UpdateAsync(updatedCountry);
+
+            if (affectedRows > 0)
+            {
+                return Ok();
+            }
+
+            return StatusCode(500);
+        }
+
+        [HttpGet("{countryId}/zipcodes")]
+        public async Task<ActionResult<List<Zip>>> GetZipByCountryId(int countryId)
+        {
+            var country = await _countryRepository.GetByIdAsync(countryId);
+            if (country == null)
+            {
+                return NotFound($"Country with Id {countryId} not found");
+            }
+
+            var zipCodes = await _zipRepository.GetByCountryIdAsync(countryId);
+            if (zipCodes.Count == 0)
+            {
+                return Ok($"No zip codes yet for country \"{country.Name}\"");
+            }
+
+            return Ok(zipCodes);
         }
     }
 }

@@ -31,9 +31,15 @@ namespace BigShop.Repository
             p.Add("PaymentMethod_Id", customerOrderCreate.PaymentMethod_Id);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataAccess.SaveData("dbo.spCustomerOrder_Insert", p, _connectionString.SqlConnectionName);
-
-            return p.Get<int>("Id");
+            int affectedRows = await _dataAccess.SaveData("dbo.spCustomerOrder_Insert", p, _connectionString.SqlConnectionName);
+            if (affectedRows > 0)
+            {
+                return p.Get<int>("Id");
+            }
+            else
+            {
+                return -1;
+            }
         }
 
 

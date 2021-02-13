@@ -29,7 +29,7 @@ namespace BigShop.Web.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Category))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Create([FromBody] CategoryCreate categoryCreate)
+        public async Task<ActionResult> CreateCategory([FromBody] CategoryCreate categoryCreate)
         {
             if (ModelState.IsValid == false)
             {
@@ -41,18 +41,18 @@ namespace BigShop.Web.Controllers
             {
                 var newCategory = await _categoryRepository.GetByIdAsync(newCategoryId);
 
-                return CreatedAtRoute("GetById", new { categoryId = newCategoryId }, newCategory);
+                return CreatedAtRoute("GetByCategoryId", new { categoryId = newCategoryId }, newCategory);
             }
 
             return StatusCode(500);
         }
 
-        [HttpDelete("{categoryId}", Name = "Delete")]
+        [HttpDelete("{categoryId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Delete(int categoryId)
+        public async Task<ActionResult> DeleteCategory(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (category == null)
@@ -78,7 +78,7 @@ namespace BigShop.Web.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Category>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<Category>>> GetAll()
+        public async Task<ActionResult<List<Category>>> GetAllCategories()
         {
             var categories = await _categoryRepository.GetAllAsync();
             if (categories.Count == 0)
@@ -89,15 +89,15 @@ namespace BigShop.Web.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("{categoryId}", Name = "GetById")]
+        [HttpGet("{categoryId}", Name = "GetByCategoryId")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Category))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Category>> GetById(int categoryId)
+        public async Task<ActionResult<Category>> GetByCategoryId(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (category == null)
             {
-                return NotFound("Category does not exist");
+                return NotFound($"Category with Id {categoryId} does not exist");
             }
             return Ok(category);
         }
@@ -107,7 +107,7 @@ namespace BigShop.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Category>> Update(int categoryId, [FromBody] Category updatedCategory)
+        public async Task<ActionResult> UpdateCategory(int categoryId, [FromBody] Category updatedCategory)
         {
             if (categoryId != updatedCategory.Id)
             {
@@ -136,7 +136,7 @@ namespace BigShop.Web.Controllers
         [HttpGet("{categoryId}/products")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<Product>>> GetProductByCategoryId(int categoryId)
+        public async Task<ActionResult<List<Product>>> GetProductsByCategoryId(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (category == null)
@@ -152,6 +152,5 @@ namespace BigShop.Web.Controllers
 
             return Ok(products);
         }
-
     }
 }

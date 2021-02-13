@@ -32,9 +32,15 @@ namespace BigShop.Repository
             p.Add("Category_Id", productCreate.Category_Id);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataAccess.SaveData("dbo.spProduct_Insert", p, _connectionString.SqlConnectionName);
-
-            return p.Get<int>("Id");
+            int affectedRows = await _dataAccess.SaveData("dbo.spProduct_Insert", p, _connectionString.SqlConnectionName);
+            if (affectedRows > 0)
+            {
+                return p.Get<int>("Id");
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         public Task<int> DeleteAsync(int productId)
