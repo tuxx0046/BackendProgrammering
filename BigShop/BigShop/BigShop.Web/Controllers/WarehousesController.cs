@@ -91,7 +91,7 @@ namespace BigShop.Web.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<Warehouse>>> GetAllWarehouses()
         {
-            var warehouses = await _warehouseRepository.GetAllAsync();
+            ICollection<Warehouse> warehouses = await _warehouseRepository.GetAllAsync();
             if (warehouses == null)
             {
                 return StatusCode(500);
@@ -101,7 +101,7 @@ namespace BigShop.Web.Controllers
             {
                 return Ok("No warehouses in database");
             }
-
+            
             return Ok(warehouses);
         }
 
