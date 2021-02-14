@@ -9,6 +9,8 @@ namespace BigShop.Repository
         Task<int> CreateAsync(OrderProcessCreate orderProcessCreate);
         Task<int> DeleteByCustomerOrderIdAsync(int customerOrderId);
         Task<List<OrderProcess>> GetAllAsync();
-        Task<OrderProcess> GetByCustomerOrderIdAsync(int customerOrderId);
+        Task<List<OrderProcess>> GetByCustomerOrderIdAsync(int customerOrderId);
+        Task<List<OrderProcess>> GetByEmployeeIdAsync(int employeeId);
+        Task<List<OrderProcess>> GetByOrderStatusIdAsync(int orderStatusId);
     }
 }

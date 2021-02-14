@@ -351,10 +351,10 @@ BEGIN
         ('2020-02-22 08:54:00', 1, 0, 2), --packaging, odense order, packed
         ('2020-02-22 16:30:11', 1, 0, 3), --packaging, odense order, sent
         ((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 1), 3, 1, 4), --salesman, berlin order, store bought
-        ((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 3), 4, 3, 0), --department leader, lyon order, started processing
-        ('2020-07-23 11:14:20', 4, 3, 1), --department leader, lyon order, picked
-        ('2020-07-23 17:30:11', 4, 3, 2), --department leader, lyon order, packed
-        ('2020-07-25 10:27:55', 4, 3, 3), --department leader, lyon order, sent
+        ((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 3), 4, 2, 0), --department leader, lyon order, started processing
+        ('2020-07-23 11:14:20', 4, 2, 1), --department leader, lyon order, picked
+        ('2020-07-23 17:30:11', 4, 2, 2), --department leader, lyon order, packed
+        ('2020-07-25 10:27:55', 4, 2, 3), --department leader, lyon order, sent
         ((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 3), 5, 3, 0), --warehouse worker, oslo order, started processing
         ('2020-08-26 09:32:10', 5, 3, 1), --warehouse worker, oslo order, picked
         ((SELECT OrderDate FROM dbo.CustomerOrder WHERE Id = 4), 7, 4, 0), --warehouse worker, moskva order, started processing

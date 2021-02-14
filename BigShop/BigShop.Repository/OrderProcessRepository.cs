@@ -46,12 +46,25 @@ namespace BigShop.Repository
                                                              _connectionString.SqlConnectionName);
         }
 
-        public async Task<OrderProcess> GetByCustomerOrderIdAsync(int customerOrderId)
+        public Task<List<OrderProcess>> GetByCustomerOrderIdAsync(int customerOrderId)
         {
-            var recs = await _dataAccess.LoadData<OrderProcess, dynamic>("dbo.spOrderProcess_GetByCustomerOrderId",
+            return _dataAccess.LoadData<OrderProcess, dynamic>("dbo.spOrderProcess_GetByCustomerOrderId",
                                                                        new { CustomerOrder_Id = customerOrderId },
                                                                        _connectionString.SqlConnectionName);
-            return recs.FirstOrDefault();
+        }
+
+        public Task<List<OrderProcess>> GetByEmployeeIdAsync(int employeeId)
+        {
+            return _dataAccess.LoadData<OrderProcess, dynamic>("dbo.spOrderProcess_GetByEmployeeId",
+                                                                       new { Employee_Id = employeeId },
+                                                                       _connectionString.SqlConnectionName);
+        }
+
+        public Task<List<OrderProcess>> GetByOrderStatusIdAsync(int orderStatusId)
+        {
+            return _dataAccess.LoadData<OrderProcess, dynamic>("dbo.spOrderProcess_GetByOrderStatusId",
+                                                                       new { Employee_Id = orderStatusId },
+                                                                       _connectionString.SqlConnectionName);
         }
     }
 }

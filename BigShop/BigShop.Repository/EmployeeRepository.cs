@@ -71,7 +71,7 @@ namespace BigShop.Repository
                                                                        new { Department_Id = departmentId },
                                                                        _connectionString.SqlConnectionName);
         }
-
+        
         public Task<int> UpdateAsync(Employee updatedEmployee)
         {
             return _dataAccess.SaveData("dbo.spEmployee_Update",
