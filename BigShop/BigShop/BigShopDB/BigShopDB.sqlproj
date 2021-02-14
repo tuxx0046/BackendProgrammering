@@ -196,6 +196,7 @@
     <Build Include="dbo\Stored Procedures\OrderProcess\spOrderProcess_GetByEmployeeId.sql" />
     <Build Include="dbo\Stored Procedures\OrderProcess\spOrderProcess_GetByOrderStatusId.sql" />
     <Build Include="dbo\Stored Procedures\OrderLine\spOrderLine_GetByProductId.sql" />
+    <Build Include="dbo\Stored Procedures\Department\spDepartment_GetByWarehouseId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BigShopDB.publish.xml" />

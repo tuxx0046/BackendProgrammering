@@ -62,6 +62,13 @@ namespace BigShop.Repository
             return recs.FirstOrDefault();
         }
 
+        public Task<List<Department>> GetByWarehouseIdAsync(int warehouseId)
+        {
+            return _dataAccess.LoadData<Department, dynamic>("dbo.spDepartment_GetByWarehouseId",
+                                                                       new { Warehouse_Id = warehouseId },
+                                                                       _connectionString.SqlConnectionName);
+        }
+
         public Task<int> UpdateAsync(Department updatedDepartment)
         {
             return _dataAccess.SaveData("dbo.spDepartment_Update",
