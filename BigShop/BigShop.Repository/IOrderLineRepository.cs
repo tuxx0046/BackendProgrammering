@@ -9,5 +9,6 @@ namespace BigShop.Repository
         Task<int> CreateAsync(List<OrderLineCreate> orderLineCreate);
         Task<int> DeleteByCustomerOrderIdAsync(int customerOrderId);
         Task<List<OrderLine>> GetByCustomerOrderIdAsync(int customerOrderId);
+        Task<List<OrderLine>> GetByProductIdAsync(int productId);
     }
 }

@@ -60,5 +60,15 @@ namespace BigShop.Repository
                                                              },
                                                              _connectionString.SqlConnectionName);
         }
+
+        public Task<List<OrderLine>> GetByProductIdAsync(int productId)
+        {
+            return _dataAccess.LoadData<OrderLine, dynamic>("dbo.spOrderLine_GetByProductId",
+                                                             new
+                                                             {
+                                                                 Product_Id = productId
+                                                             },
+                                                             _connectionString.SqlConnectionName);
+        }
     }
 }
