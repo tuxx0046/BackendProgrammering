@@ -63,7 +63,7 @@ namespace BigShop.Repository
         public Task<List<OrderProcess>> GetByOrderStatusIdAsync(int orderStatusId)
         {
             return _dataAccess.LoadData<OrderProcess, dynamic>("dbo.spOrderProcess_GetByOrderStatusId",
-                                                                       new { Employee_Id = orderStatusId },
+                                                                       new { OrderStatus_Id = orderStatusId },
                                                                        _connectionString.SqlConnectionName);
         }
     }
