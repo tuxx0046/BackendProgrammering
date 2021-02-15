@@ -61,9 +61,21 @@ namespace BigShop.Repository
                                                                     _connectionString.SqlConnectionName);
         }
 
+        public async Task<Warehouse_Product> GetByProductIdAndWarehouseIdAsync(int productId, int warehouseId)
+        {
+            var recs = await _dataAccess.LoadData<Warehouse_Product, dynamic>("dbo.spWarehouse_Product_GetByProductIdAndWarehouseId",
+                                                                    new 
+                                                                    { 
+                                                                        Product_Id = productId, 
+                                                                        Warehouse_Id = warehouseId
+                                                                    },
+                                                                    _connectionString.SqlConnectionName);
+            return recs.FirstOrDefault();
+        }
+
         public Task<int> UpdateQuantityAsync(Warehouse_Product warehouse_Product)
         {
-            return _dataAccess.SaveData("dbo.Warehouse_Product_UpdateQuantity",
+            return _dataAccess.SaveData("dbo.spWarehouse_Product_UpdateQuantity",
                                         new
                                         {
                                             Quantity = warehouse_Product.Quantity,

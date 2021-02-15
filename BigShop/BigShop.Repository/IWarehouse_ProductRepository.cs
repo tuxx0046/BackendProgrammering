@@ -13,5 +13,6 @@ namespace BigShop.Repository
         Task<List<Warehouse_Product>> GetByProductIdAsync(int productId);
         Task<List<Warehouse_Product>> GetByWarehouseIdAsync(int warehouseId);
         Task<int> UpdateQuantityAsync(Warehouse_Product warehouse_Product);
+        Task<Warehouse_Product> GetByProductIdAndWarehouseIdAsync(int productId, int warehouseId);
     }
 }

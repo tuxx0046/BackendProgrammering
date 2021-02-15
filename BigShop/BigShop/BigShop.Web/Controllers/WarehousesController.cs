@@ -18,16 +18,19 @@ namespace BigShop.Web.Controllers
         private readonly IZipRepository _zipRepository;
         private readonly IWarehouse_ProductRepository _warehouse_ProductRepository;
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly IProductRepository _productRepository;
 
         public WarehousesController(IWarehouseRepository warehouseRepository,
                                     IZipRepository zipRepository,
                                     IWarehouse_ProductRepository warehouse_ProductRepository,
-                                    IDepartmentRepository departmentRepository)
+                                    IDepartmentRepository departmentRepository,
+                                    IProductRepository productRepository)
         {
             _warehouseRepository = warehouseRepository;
             _zipRepository = zipRepository;
             _warehouse_ProductRepository = warehouse_ProductRepository;
             _departmentRepository = departmentRepository;
+            _productRepository = productRepository;
         }
 
         [HttpPost]
@@ -174,6 +177,73 @@ namespace BigShop.Web.Controllers
                 return BadRequest("Warehouse has no products");
             }
             return Ok(warehouseProducts);
+        }
+
+        [HttpGet("{warehouseId}/products/{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Warehouse_Product>> GetProductQuantity(int warehouseId, int productId)
+        {
+            var warehouse = await _warehouseRepository.GetByIdAsync(warehouseId);
+            if (warehouse == null)
+            {
+                return NotFound($"Warehouse with Id {warehouseId} does not exist");
+            }
+
+            var product = await _productRepository.GetByIdAsync(productId);
+            if (product == null)
+            {
+                return BadRequest("Product doesn't exist");
+            }
+
+            var warehouseProduct = await _warehouse_ProductRepository.GetByProductIdAndWarehouseIdAsync(productId,
+                                                                                                        warehouseId);
+            if (warehouseProduct == null)
+            {
+                return NotFound();
+            }
+            return Ok(warehouseProduct);
+        }
+
+        [HttpPut("{warehouseId}/products/{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateProductQuantity(int warehouseId, 
+                                                              int productId, 
+                                                              [FromBody] Warehouse_Product warehouse_Product)
+        {
+            if (warehouse_Product.Quantity < 0)
+            {
+                return BadRequest("Quantity cannot be negative");
+            }
+
+            if (warehouseId != warehouse_Product.Warehouse_Id || productId != warehouse_Product.Warehouse_Id)
+            {
+                return BadRequest("Ids not matching endpoint");
+            }
+
+            var warehouse = await _warehouseRepository.GetByIdAsync(warehouseId);
+            if (warehouse == null)
+            {
+                return NotFound($"Warehouse with Id {warehouseId} does not exist");
+            }
+
+            var product = await _productRepository.GetByIdAsync(productId);
+            if (product == null)
+            {
+                return BadRequest("Product doesn't exist");
+            }
+
+            int affectedRows = await _warehouse_ProductRepository.UpdateQuantityAsync(warehouse_Product);
+            if (affectedRows == 1)
+            {
+                return Ok();
+            }
+
+            return StatusCode(500);
         }
     }
 }
