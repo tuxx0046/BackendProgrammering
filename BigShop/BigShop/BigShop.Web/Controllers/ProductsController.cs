@@ -190,5 +190,26 @@ namespace BigShop.Web.Controllers
 
             return StatusCode(500);
         }
+         
+        [HttpGet("{productId}/warehouses")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<Warehouse_Product>>> GetWarehousesWithProduct(int productId)
+        {
+            var product = await _productRepository.GetByIdAsync(productId);
+            if (product == null)
+            {
+                return NotFound($"Product with Id {productId} does not exist");
+            }
+
+            var warehouseProducts = await _warehouse_ProductRepository.GetByProductIdAsync(productId);
+            if (warehouseProducts.Count == 0)
+            {
+                return BadRequest("Warehouse has no products");
+            }
+            return Ok(warehouseProducts);
+        }
     }
 }

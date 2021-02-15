@@ -1,4 +1,5 @@
 ﻿using BigShop.Models.Warehouse;
+using BigShop.Models.Warehouse_Product;
 using BigShop.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -153,6 +154,26 @@ namespace BigShop.Web.Controllers
             }
 
             return StatusCode(500);
+        }
+
+        [HttpGet("{warehouseId}/products")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<Warehouse_Product>>> GetWarehouseProducts(int warehouseId)
+        {
+            var warehouse = await _warehouseRepository.GetByIdAsync(warehouseId);
+            if (warehouse == null)
+            {
+                return NotFound($"Warehouse with Id {warehouseId} does not exist");
+            }
+
+            var warehouseProducts = await _warehouse_ProductRepository.GetByWarehouseIdAsync(warehouseId);
+            if (warehouseProducts.Count == 0)
+            {
+                return BadRequest("Warehouse has no products");
+            }
+            return Ok(warehouseProducts);
         }
     }
 }
