@@ -2,13 +2,15 @@
     <div class="col-xs-12">
         <button            
             class="btn btn-success"
+            (click)="onNewProduct()"
             >New Product</button>
     </div>
 </div>
 <hr>
 <div class="row ">
     <div class="col-xs-12">
-        <app-product-item  *ngFor="let productElement of products"
-        [product]="productElement"></app-product-item>
+        <app-product-item  *ngFor="let productElement of products; let i = index"
+        [product]="productElement"
+        [index]="i"></app-product-item>
     </div>
 </div>

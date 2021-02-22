@@ -1,14 +1,13 @@
 <div class="row">
     <div class="col-xs-12">
-        <button            
-            class="btn btn-success"
-            >New Manufacturer</button>
+        <button class="btn btn-success" (click)="onNewManufacturer()">New Manufacturer</button>
     </div>
 </div>
 <hr>
 <div class="row ">
     <div class="col-xs-12">
-        <app-manufacturer-item  *ngFor="let manufacturerEl of manufacturers"
-        [manufacturer]="manufacturerEl"></app-manufacturer-item>
+        <app-manufacturer-item  *ngFor="let manufacturerEl of manufacturers; let i = index"
+        [manufacturer]="manufacturerEl"
+        [index]="i"></app-manufacturer-item>
     </div>
 </div>

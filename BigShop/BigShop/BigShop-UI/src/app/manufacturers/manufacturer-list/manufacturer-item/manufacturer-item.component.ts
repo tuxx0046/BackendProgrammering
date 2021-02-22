@@ -1,6 +1,5 @@
 import { Component, Input, OnInit} from '@angular/core';
 import { Manufacturer } from '../../manufacturer.model';
-import { ManufacturerService } from '../../manufacturer.service';
 
 @Component({
   selector: 'app-manufacturer-item',
@@ -9,15 +8,11 @@ import { ManufacturerService } from '../../manufacturer.service';
 })
 export class ManufacturerItemComponent implements OnInit {
   @Input() manufacturer: Manufacturer;
-
-  constructor(private manufacturerService: ManufacturerService) { }
+  @Input() index: number;
 
   ngOnInit(): void {
     
   }
 
-  onSelected() {
-    this.manufacturerService.manufacturerSelected.emit(this.manufacturer);
-  }
 
 }

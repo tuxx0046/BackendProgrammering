@@ -1,8 +1,7 @@
-import { EventEmitter } from "@angular/core";
+import { Subject } from "rxjs";
 import { Manufacturer } from "./manufacturer.model";
 
 export class ManufacturerService {
-    manufacturerSelected = new EventEmitter<Manufacturer>();
 
     private manufacturers: Manufacturer[] = [
         new Manufacturer('Samsung', 0),
@@ -11,5 +10,9 @@ export class ManufacturerService {
     
     getManufacturers() {
         return this.manufacturers.slice();
+    }
+
+    getManufacturer(id: number) {
+        return this.manufacturers[id];
     }
 }

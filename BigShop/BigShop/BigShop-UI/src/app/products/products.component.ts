@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from './product.model';
-import { ProductService } from './product.service';
 
 @Component({
   selector: 'app-products',
@@ -8,16 +7,11 @@ import { ProductService } from './product.service';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-  selectedProduct: Product;
 
-  constructor(private productService: ProductService) { }
+  constructor() { }
 
   ngOnInit(){
-    this.productService.productSelected.subscribe(
-      (product: Product) => {
-        this.selectedProduct = product;
-      }
-    )
+    
   }
 
 }

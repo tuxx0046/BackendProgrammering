@@ -3,10 +3,6 @@
         <app-manufacturer-list></app-manufacturer-list>
     </div>
     <div class="col-md-7">
-        <app-manufacturer-detail
-        *ngIf="selectedManufacturer; else infoText" [manufacturer]="selectedManufacturer"></app-manufacturer-detail>
-        <ng-template #infoText>
-            <p>Please select a manufacturer!</p>
-        </ng-template>
+        <router-outlet></router-outlet>
     </div>
 </div>

@@ -1,8 +1,7 @@
-import { EventEmitter } from "@angular/core";
+import { Subject } from "rxjs";
 import { Category } from "./category.model";
 
 export class CategoryService {
-    categorySelected = new EventEmitter<Category>();
     
     private categories: Category[] = [
         new Category('TV', 0),
@@ -11,5 +10,9 @@ export class CategoryService {
 
     getCategories() {
         return this.categories.slice();
+    }
+
+    getCategory(id: number) {
+        return this.categories[id];
     }
 }

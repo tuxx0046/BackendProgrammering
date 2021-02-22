@@ -1,8 +1,7 @@
-import { EventEmitter } from "@angular/core";
+import { Subject } from "rxjs";
 import { Product } from "./product.model";
 
 export class ProductService {
-    productSelected = new EventEmitter<Product>();
 
     private products: Product[] = [
         new Product(
@@ -28,5 +27,9 @@ export class ProductService {
 
     getProducts() {
         return this.products.slice();
+    }
+
+    getProduct(id: number) {
+      return this.products[id];
     }
 }

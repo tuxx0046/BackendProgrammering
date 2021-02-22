@@ -1,7 +1,6 @@
 import { Component, Input, OnInit} from '@angular/core';
 
 import { Category } from '../../category.model';
-import { CategoryService } from '../../category.service';
 
 @Component({
   selector: 'app-category-item',
@@ -10,13 +9,9 @@ import { CategoryService } from '../../category.service';
 })
 export class CategoryItemComponent implements OnInit {
   @Input() category: Category;
+  @Input() index: number;
 
-  constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-  }
-
-  onSelected() {
-    this.categoryService.categorySelected.emit(this.category);
   }
 }
