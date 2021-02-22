@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-xs-12">
+        <button class="btn btn-success">New Category</button>
+    </div>
+</div>
+<hr>
+<div class="row ">
+    <div class="col-xs-12">
+        <app-category-item  *ngFor="let categoryEl of categories"
+        [category]="categoryEl"></app-category-item>
+    </div>
+</div>

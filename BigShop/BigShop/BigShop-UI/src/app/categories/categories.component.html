@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-md-5">
+        <app-category-list></app-category-list>
+    </div>
+    <div class="col-md-7">
+        <app-category-detail
+        *ngIf="selectedCategory; else infoText" 
+        [category]="selectedCategory"></app-category-detail>
+        <ng-template #infoText>
+            <p>Please select a Category</p>
+        </ng-template>
+    </div>
+</div>
