@@ -26,4 +26,9 @@ export class ManufacturerDetailComponent implements OnInit {
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
+  onDeleteManufacturer() {
+    this.manufacturerService.deleteManufacturer(this.id);
+    this.router.navigate(['/manufacturers']);
+  }
+
 }

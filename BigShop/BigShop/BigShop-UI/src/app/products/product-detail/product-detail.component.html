@@ -27,12 +27,12 @@
     </div>
     <div class="row">
         <div class="col-xs-12 list-group-item">
-            Manufacturer ID: <span class="pull-right">{{product.manufacturer_Id}}</span>
+            Manufacturer ID: <span class="pull-right">{{product.manufacturer_Id}} ({{manufacturer.name}})</span>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12 list-group-item">
-            Category ID: <span class="pull-right">{{product.category_Id}}</span>
+            Category ID: <span class="pull-right">{{product.category_Id}} ({{category.name}})</span>
         </div>
     </div>
 </div>
@@ -40,6 +40,6 @@
 <div class="row">
     <div class="col-xs-12">
         <a class="btn btn-primary" style="cursor: pointer; margin-right: 5px;" (click)="onEditProduct()">Edit Product</a>
-        <a class="btn btn-danger" style="cursor: pointer;" >Delete</a>
+        <a class="btn btn-danger" style="cursor: pointer;" (click)="onDeleteProduct()">Delete</a>
     </div>
 </div>

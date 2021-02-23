@@ -40,46 +40,30 @@ namespace BigShop.Web.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Product))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> CreateProduct([FromBody] ProductClientCreate productClientCreate)
+        public async Task<ActionResult> CreateProduct([FromBody] ProductCreate productCreate)
         {
             if (ModelState.IsValid == false)
             {
                 return StatusCode(400, ModelState);
             }
 
-            var manufacturer = await _manufacturerRepository.GetByIdAsync(productClientCreate.Product.Manufacturer_Id);
+            var manufacturer = await _manufacturerRepository.GetByIdAsync(productCreate.Manufacturer_Id);
             if (manufacturer == null)
             {
                 return BadRequest("No manufacturer with that Id");
             }
 
-            var category = await _categoryRepository.GetByIdAsync(productClientCreate.Product.Category_Id);
+            var category = await _categoryRepository.GetByIdAsync(productCreate.Category_Id);
             if (category == null)
             {
                 return BadRequest("No category with that Id");
             }
 
-            var warehouse = await _warehouseRepository.GetByIdAsync(productClientCreate.QuantityAndWarehouse.Warehouse_Id);
-            if (warehouse == null)
-            {
-                return BadRequest("No warehouse with that Id");
-            }
-                         
-            int newProductId = await _productRepository.CreateAsync(productClientCreate.Product);
+                                     
+            int newProductId = await _productRepository.CreateAsync(productCreate);
             if (newProductId != -1)
             {
-                var newProduct = await _productRepository.GetByIdAsync(newProductId);
-                // Establish relation between warehouse and product and product quantity in that warehouse
-                Warehouse_ProductCreate warehouseProduct = new Warehouse_ProductCreate
-                {
-                    Quantity = productClientCreate.QuantityAndWarehouse.Quantity,
-                    Warehouse_Id = productClientCreate.QuantityAndWarehouse.Warehouse_Id,
-                    Product_Id = newProduct.Id
-                };
-                  
-                warehouseProduct.Product_Id = newProduct.Id;
-
-                await _warehouse_ProductRepository.CreateAsync(warehouseProduct);
+                var newProduct = await _productRepository.GetByIdAsync(newProductId);               
 
                 return CreatedAtRoute("GetByProductId", new { productId = newProductId }, newProduct);
             }

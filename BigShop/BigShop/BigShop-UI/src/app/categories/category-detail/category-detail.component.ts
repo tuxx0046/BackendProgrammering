@@ -29,4 +29,9 @@ export class CategoryDetailComponent implements OnInit {
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
+  onDeleteCategory() {
+    this.categoryService.deleteCategory(this.id);
+    this.router.navigate(['/categories']);
+  }
+
 }

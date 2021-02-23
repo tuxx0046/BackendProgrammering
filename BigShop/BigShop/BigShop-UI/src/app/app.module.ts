@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -26,6 +27,7 @@ import { ManufacturerStartComponent } from './manufacturers/manufacturer-start/m
 import { CategoryService } from './categories/category.service';
 import { ManufacturerService } from './manufacturers/manufacturer.service';
 import { ProductService } from './products/product.service';
+import { WarehouseService } from './products/warehouse.service';
 
 
 @NgModule({
@@ -54,9 +56,11 @@ import { ProductService } from './products/product.service';
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
     AppRoutingModule
   ],
-  providers: [CategoryService, ManufacturerService, ProductService],
+  providers: [CategoryService, ManufacturerService, ProductService, WarehouseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
