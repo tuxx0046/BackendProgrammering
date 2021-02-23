@@ -8,6 +8,6 @@
     <div class="col-xs-12">
         <app-manufacturer-item  *ngFor="let manufacturerEl of manufacturers; let i = index"
         [manufacturer]="manufacturerEl"
-        [index]="i"></app-manufacturer-item>
+        [id]="manufacturerEl.id"></app-manufacturer-item>
     </div>
 </div>

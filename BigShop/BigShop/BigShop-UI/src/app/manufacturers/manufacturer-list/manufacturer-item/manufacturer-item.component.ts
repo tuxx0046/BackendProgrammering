@@ -8,7 +8,7 @@ import { Manufacturer } from '../../manufacturer.model';
 })
 export class ManufacturerItemComponent implements OnInit {
   @Input() manufacturer: Manufacturer;
-  @Input() index: number;
+  @Input() id: number;
 
   ngOnInit(): void {
     

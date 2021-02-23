@@ -16,7 +16,7 @@ export class ManufacturerListComponent implements OnInit, OnDestroy {
   constructor(private manufacturerService: ManufacturerService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.manufacturerService.manufacturersChanged.subscribe(
+    this.subscription = this.manufacturerService.manufacturersChanged.subscribe(
       (manufacturer: Manufacturer[]) => {
         this.manufacturers = manufacturer;
       }

@@ -15,12 +15,13 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   constructor(private categoryService: CategoryService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.categoryService.categoriesChanged.subscribe(
+    this.subscription = this.categoryService.categoriesChanged.subscribe(
       (categories: Category[]) => {
         this.categories = categories;
       }
     );
     this.categories = this.categoryService.getCategories();
+    
   }
 
   onNewCategory() {

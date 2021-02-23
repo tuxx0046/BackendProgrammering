@@ -9,7 +9,7 @@ import { Category } from '../../category.model';
 })
 export class CategoryItemComponent implements OnInit {
   @Input() category: Category;
-  @Input() index: number;
+  @Input() id: number;
 
 
   ngOnInit(): void {
