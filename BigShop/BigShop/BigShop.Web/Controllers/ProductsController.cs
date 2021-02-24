@@ -1,6 +1,7 @@
 ﻿using BigShop.Models.Product;
 using BigShop.Models.Warehouse_Product;
 using BigShop.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace BigShop.Web.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")] //interferes with individual routes set for actions
     [ApiController]
     public class ProductsController : ControllerBase
