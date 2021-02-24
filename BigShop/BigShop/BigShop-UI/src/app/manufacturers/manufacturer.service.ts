@@ -7,12 +7,12 @@ import { Manufacturer } from "./manufacturer.model";
 export class ManufacturerService {
     manufacturersChanged = new Subject<Manufacturer[]>();
 
-    constructor(private http: HttpClient){}
-
     private manufacturers: Manufacturer[] = [
         // new Manufacturer('Samsung', 0),
         // new Manufacturer('Apple', 1)
-      ];
+    ];
+    
+    constructor(private http: HttpClient){}
     
     setManufacturers(manufacturers: Manufacturer[]) {
           this.manufacturers = manufacturers;
@@ -46,6 +46,9 @@ export class ManufacturerService {
     }
 
     updateManufacturer(id: number, newManufacturer: Manufacturer) {
+        let index = this.manufacturers.indexOf(this.manufacturers.find(c => c.id == id))
+        this.manufacturers[index] = newManufacturer;
+
         const updateUrl = 'http://localhost:5000/api/manufacturers/' + id;
         this.http.put(updateUrl, newManufacturer).subscribe(
             response => {
@@ -59,6 +62,9 @@ export class ManufacturerService {
         this.http.delete(deleteUrl).subscribe(
             response => {
                 this.loadManufacturers();
+            }, error => {
+                alert('Cannot delete manufacturer with products in it');
+                // this.errorEvent.next(error.message);
             }
         );
     }

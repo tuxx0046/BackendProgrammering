@@ -1,13 +1,15 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
+import { ProductService } from "../products/product.service";
 import { Category } from "./category.model";
 
 @Injectable({providedIn: 'root'})
 export class CategoryService {
     categoriesChanged = new Subject<Category[]>();
+    // errorEvent = new Subject<string>();
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private productService: ProductService) {}
 
     private categories: Category[] = [
         // new Category('TV', 0),
@@ -48,6 +50,9 @@ export class CategoryService {
     }
 
     updateCategory(id: number, newCategory: Category) {
+        let index = this.categories.indexOf(this.categories.find(c => c.id == id))
+        this.categories[index] = newCategory;
+
         const updateUrl = 'http://localhost:5000/api/categories/' + id;
         this.http.put(updateUrl, newCategory).subscribe(
             response => {
@@ -59,9 +64,11 @@ export class CategoryService {
     deleteCategory(id: number) {
         const deleteUrl = 'http://localhost:5000/api/categories/' + id;
         this.http.delete(deleteUrl).subscribe(
-            response => {
-                // console.log(response);
+            response => {                
                 this.loadCategories();
+            }, error => {
+                alert('Cannot delete category with products in it');
+                // this.errorEvent.next(error.message);
             }
         );
     }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { CategoryStartComponent } from '../category-start/category-start.component';
 
 import { Category } from '../category.model';
 import { CategoryService } from '../category.service';
@@ -10,7 +9,7 @@ import { CategoryService } from '../category.service';
   templateUrl: './category-detail.component.html',
   styleUrls: ['./category-detail.component.css']
 })
-export class CategoryDetailComponent implements OnInit {
+export class CategoryDetailComponent implements OnInit{
   category: Category;
   id: number;
 
@@ -22,7 +21,7 @@ export class CategoryDetailComponent implements OnInit {
         this.id = +params['id'];
         this.category = this.categoryService.getCategory(this.id);
       }
-    )
+    );
   }
 
   onEditCategory() {
@@ -33,5 +32,4 @@ export class CategoryDetailComponent implements OnInit {
     this.categoryService.deleteCategory(this.id);
     this.router.navigate(['/categories']);
   }
-
 }

@@ -1,59 +1,68 @@
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { Product } from "./product.model";
 
+@Injectable({providedIn: 'root'})
 export class ProductService {
     productsChanged = new Subject<Product[]>();
 
     private products: Product[] = [
-        new Product(
-          'Samsung TV',
-          1500.55,
-          'adfghjkltreds',
-          2500.66,
-          0,
-          0,
-          0
-        ),
-        new Product(
-          'Apple ipad',
-          5500.55,
-          'edfyujkmnbgfc',
-          200.66,
-          1,
-          1,
-          1
-        ),
-    
+        // new Product('Samsung TV', 1500.55, 'adfghjkltreds', 2500.66, 0, 0, 0),
+        // new Product('Apple ipad', 5500.55,'edfyujkmnbgfc', 200.66, 1, 1, 1),    
       ];
 
+    constructor(private http: HttpClient) {}
+
+    setProducts(products: Product[]) {
+      this.products = products;
+      this.productsChanged.next(this.products.slice());
+    }
+
+    loadProducts() {
+      this.http.get<Product[]>('http://localhost:5000/api/products').subscribe(
+        products => {
+          this.setProducts(products);
+        }
+      );
+    }
+
     getProducts() {
+        this.loadProducts();
         return this.products.slice();
     }
 
     getProduct(id: number) {
-      return this.products.find(p => p.id == id);
+        return this.products.find(p => p.id == id);
     }
 
     addProduct(product: Product) {
-        let nextIndex = this.products.length;
-        product.id = nextIndex;
-        this.products.push(product);
-
-        this.productsChanged.next(this.products.slice());
+        this.http.post<Product>('http://localhost:5000/api/products', product).subscribe(
+          product => {
+            this.products.push(product);
+            this.loadProducts();
+          }
+        );
     }
 
     updateProduct(id: number, newProduct: Product) {
       let index = this.products.indexOf(this.products.find(c => c.id == id))
       this.products[index] = newProduct;
 
-      this.productsChanged.next(this.products.slice());
+        const updateUrl = 'http://localhost:5000/api/products/' + id;
+        this.http.put(updateUrl, newProduct).subscribe(
+          response => {
+            this.loadProducts();
+          }
+        );
     }
 
     deleteProduct(id: number) {
-      let product = this.products.find(p => p.id == id)
-      let index = this.products.indexOf(product);
-      this.products.splice(index, 1);
-
-      this.productsChanged.next(this.products.slice());
+        const deleteUrl = 'http://localhost:5000/api/products/' + id;
+        this.http.delete(deleteUrl).subscribe(
+          response => {
+            this.loadProducts();
+          }
+        );
   }
 }
