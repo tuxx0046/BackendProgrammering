@@ -28,6 +28,9 @@ import { CategoryService } from './categories/category.service';
 import { ManufacturerService } from './manufacturers/manufacturer.service';
 import { ProductService } from './products/product.service';
 import { WarehouseService } from './products/warehouse.service';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
@@ -51,7 +54,10 @@ import { WarehouseService } from './products/warehouse.service';
     ManufacturerEditComponent,
     ManufacturerListComponent,
     ManufacturerItemComponent,
-    ManufacturerStartComponent
+    ManufacturerStartComponent,
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
