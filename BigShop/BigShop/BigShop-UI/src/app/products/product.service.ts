@@ -62,7 +62,10 @@ export class ProductService {
         this.http.delete(deleteUrl).subscribe(
           response => {
             this.loadProducts();
-          }
+          }, error => {
+            alert('Cannot delete products that have been ordered');
+            // this.errorEvent.next(error.message);
+        }
         );
   }
 }
