@@ -1,4 +1,24 @@
-﻿--USE MASTER; DROP DATABASE IF EXISTS BigShopdb;
+﻿  --------Category
+  SELECT *
+  FROM [BigShopDB].[dbo].[Category]
+   
+  --------Product
+  SELECT *
+  FROM [BigShopDB].[dbo].[Product]
+
+  --------Manufacturer
+  SELECT *
+  FROM [BigShopDB].[dbo].[Manufacturer]
+
+  --------ApplicationUser
+  SELECT *
+  FROM [BigShopDB].[dbo].[ApplicationUser]
+
+
+
+
+
+--USE MASTER; DROP DATABASE IF EXISTS BigShopdb;
 CREATE DATABASE BigShop;
 
 USE BigShop;
@@ -583,7 +603,7 @@ VALUES
 ('Botan', 'Sisiro', 'moskva@bigshop.com', '44522133', 6, 4, 1), --Moskva afdeling, customer service
 ('Polka', 'Omaru', 'moskva@bigshop.com', '87965521', 1, 4, 1) --Moskva afdeling, warehouse worker
 
-SELECT e.Id, CONCAT_WS(' ', e.FirstName, e.LastName) as 'Name', e.Email, e.Phone, p.Name as 'Position', d.Name as 'Department'
+SELECT e.Id, CONCAT_WS(' ', e.FirstName, e.LastName) as 'Name', e.Phone, p.Name as 'Position', d.Name as 'Department'
 FROM dbo.Employee e
 LEFT JOIN dbo.Position p
 ON e.Position_Id = p.Id
@@ -648,6 +668,7 @@ VALUES
 ('2021-01-29 15:10:44', 6, 4, 5) --customer service, moska order, on hold
 
 
+----- Order process view
 SELECT op.ProcessDate as 'Time of processing', op.CustomerOrder_Id as 'Order Id', CONCAT_WS(' ', e.FirstName, e.LastName) as 'Employee name', os.Name as 'Status'
 FROM dbo.OrderProcess op
 LEFT JOIN dbo.Employee e
@@ -656,7 +677,7 @@ LEFT JOIN dbo.OrderStatus os
 ON op.OrderStatus_Id = os.Id
 
 
-
+----- Orders view
 select co.Id, co.OrderDate, z.CityName 
 from CustomerOrder co
 left join Customer c
@@ -666,7 +687,7 @@ on c.Zip_Id = z.Id
 
 SELECT * FROM dbo.OrderStatus
 
-SELECT e.Id, CONCAT_WS(' ', e.FirstName, e.LastName) as 'Name', e.Email, e.Phone, p.Name as 'Position', d.Name as 'Department'
+SELECT e.Id, CONCAT_WS(' ', e.FirstName, e.LastName) as 'Name', e.Phone, p.Name as 'Position', d.Name as 'Department'
 FROM dbo.Employee e
 LEFT JOIN dbo.Position p
 ON e.Position_Id = p.Id
@@ -675,10 +696,8 @@ ON e.Department_Id = d.Id
 ORDER BY Id
 
 
-------------------------VIEWS------------------------
-CREATE VIEW [dbo].[Customer_View]
-AS 
-	SELECT c.Id, c.FirstName, c.LastName, c.Email, c.Phone, z.ZipCode, cn.Name 
+
+	SELECT c.Id, c.FirstName, c.LastName, c.Phone, z.ZipCode, cn.Name 
 	FROM [dbo].[Customer] c
 	LEFT JOIN [dbo].[Zip] z
 	ON c.[Zip_Id] = z.[Id]

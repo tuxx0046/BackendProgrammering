@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BigShop.Web.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CountriesController : ControllerBase

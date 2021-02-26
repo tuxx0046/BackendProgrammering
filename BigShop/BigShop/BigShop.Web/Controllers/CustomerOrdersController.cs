@@ -47,7 +47,7 @@ namespace BigShop.Web.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CustomerOrder))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> CreateCategory([FromBody] CustomerOrderClientCreate customerOrderClientCreate)
+        public async Task<ActionResult> CreateCustomerOrder([FromBody] CustomerOrderClientCreate customerOrderClientCreate)
         {
             if (ModelState.IsValid == false)
             {
